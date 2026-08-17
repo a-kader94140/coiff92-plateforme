@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Coiff'92, jetons du système de design.
+
+   Portés depuis la planche Claude Design « Système Coiff92 »,
+   avec deux corrections de contraste (voir plus bas).
+
+   Un seul thème actif à la fois sur toute la page. Le thème suit
+   la préférence système et se surcharge par l'attribut
+   data-theme posé sur <html>.
+   ============================================================ */
+
+:root {
+  /* ---- Surfaces, thème clair ---- */
+  --bg: #f2f2f0;
+  --surface: #e7e7e4;
+  --surface-2: #dcdcd8;
+
+  /* ---- Encres, thème clair ---- */
+  --text: #17181a;
+  --muted-1: #3d3f42;
+  --muted-2: #52555a;
+  --muted-3: #5e6165;
+
+  /* ---- Accent ----
+     --accent sert aux aplats et aux bordures : le blanc posé dessus
+     tient 5,93:1.
+     --accent-ink sert au texte en couleur d'accent. Correction par
+     rapport à la planche : #b8341a en texte sur --surface-2 tombait
+     à 4,31:1, sous le seuil AA. #a92e17 remonte à 4,94:1 pour un
+     écart de teinte invisible à l'oeil. */
+  --accent: #b8341a;
+  --accent-ink: #a92e17;
+  --on-accent: #ffffff;
+  --accent-hover: #a02d17;
+  --accent-active: #8a2714;
+  --accent-wash: color-mix(in srgb, var(--accent) 8%, transparent);
+
+  /* ---- Filets ---- */
+  --hairline: color-mix(in srgb, var(--text) 14%, transparent);
+  --divider: color-mix(in srgb, var(--text) 26%, transparent);
+
+  /* ---- Formes ----
+     Un seul système. 3px pour les éléments de saisie et les badges,
+     6px pour les blocs et les boutons. Rien n'est en pilule. */
+  --r-sm: 3px;
+  --r-md: 6px;
+
+  /* ---- Typographie ----
+     Clash Display est dessiné serré et son espace mot est étroit.
+     Sans ces deux corrections, « Barbers et coiffeurs » se lit d'un
+     seul bloc. */
+  --display-tracking: -0.008em;
+  --display-word-gap: 0.07em;
+
+  color-scheme: light;
+}
+
+:root[data-theme="sombre"] {
+  --bg: #101113;
+  --surface: #191b1e;
+  --surface-2: #23262a;
+
+  --text: #f0efec;
+  --muted-1: #c3c5c7;
+  --muted-2: #9a9da1;
+  /* Correction relevée par la planche elle-même : #83868a sur
+     --surface-2 tombait à 4,15:1. #8b8e92 remonte à 4,62:1. */
+  --muted-3: #8b8e92;
+
+  --accent: #e9694e;
+  --accent-ink: #e9694e;
+  --on-accent: #101113;
+  --accent-hover: #ee7f68;
+  --accent-active: #f2957f;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="clair"]) {
+    --bg: #101113;
+    --surface: #191b1e;
+    --surface-2: #23262a;
+
+    --text: #f0efec;
+    --muted-1: #c3c5c7;
+    --muted-2: #9a9da1;
+    --muted-3: #8b8e92;
+
+    --accent: #e9694e;
+    --accent-ink: #e9694e;
+    --on-accent: #101113;
+    --accent-hover: #ee7f68;
+    --accent-active: #f2957f;
+
+    color-scheme: dark;
+  }
+}
+
+/* ---- Passerelle vers les utilitaires Tailwind ---- */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted-1: var(--muted-1);
+  --color-muted-2: var(--muted-2);
+  --color-muted-3: var(--muted-3);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-hairline: var(--hairline);
+  --color-divider: var(--divider);
+
+  --font-display: var(--font-display), system-ui, sans-serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+}
+
+/* ---- Base ---- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tout titre en police d'affichage porte les deux corrections
+   d'espacement, on ne les répète donc pas à chaque usage. */
+.font-display,
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: var(--display-tracking);
+  word-spacing: var(--display-word-gap);
+}
+
+/* Les chiffres gardent une chasse fixe : les tarifs, durées et codes
+   postaux s'alignent en colonne. */
+.tabular {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--accent);
+  border-radius: var(--r-sm);
+}
+
+@keyframes coiff-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coiff-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
