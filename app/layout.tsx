@@ -2,10 +2,30 @@ import type { Metadata } from "next";
 import { clashDisplay, satoshi, jetbrainsMono } from "./fonts";
 import "./globals.css";
 
+/* Sans metadataBase, Next ne sait pas transformer une vignette de partage en
+   URL absolue et le prévient à la compilation. La valeur réelle viendra de
+   Vercel à la mise en ligne. */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
-  title: "Coiff'92, annuaire des coiffeurs et barbers des Hauts-de-Seine",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Coiff'92, annuaire des coiffeurs et barbers des Hauts-de-Seine",
+    template: "%s | Coiff'92",
+  },
   description:
     "Annuaire indépendant des coiffeurs et barbers des Hauts-de-Seine. Trouvez un salon près de chez vous et envoyez-lui une demande de rendez-vous.",
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Coiff'92",
+    title: "Coiff'92, annuaire des coiffeurs et barbers des Hauts-de-Seine",
+    description:
+      "Coiffeurs et barbers du 92, par commune ou par nom. Sans classement ni publicité.",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 /* Posé avant le premier rendu : le thème est déjà bon quand la page

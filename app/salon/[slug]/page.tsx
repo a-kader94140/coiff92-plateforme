@@ -20,12 +20,14 @@ type Params = Promise<{ slug: string }>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
   const salon = trouverSalon(slug);
-  if (!salon) return { title: "Salon introuvable | Coiff'92" };
+  /* Le suffixe « | Coiff'92 » est ajouté par le gabarit de titre du layout,
+     ne pas l'écrire ici sous peine de le voir deux fois. */
+  if (!salon) return { title: "Salon introuvable" };
 
   const type = LIBELLES_TYPE[salon.type].toLowerCase();
   const titre = `${salon.name}, ${type} à ${salon.city}`;
   return {
-    title: `${titre} | Coiff'92`,
+    title: titre,
     description: salon.description
       ? `${salon.description} ${salon.street}, ${salon.postalCode} ${salon.city}.`
       : `${salon.name}, ${salon.street}, ${salon.postalCode} ${salon.city}. Fiche de l'annuaire Coiff'92.`,

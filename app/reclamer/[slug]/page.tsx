@@ -13,7 +13,7 @@ type Params = Promise<{ slug: string }>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
   const salon = trouverSalon(slug);
-  return { title: salon ? `Réclamer ${salon.name} | Coiff'92` : "Coiff'92" };
+  return { title: salon ? `Réclamer ${salon.name}` : "Réclamer une fiche" };
 }
 
 export default async function ReclamerFiche({ params }: { params: Params }) {

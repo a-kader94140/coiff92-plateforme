@@ -8,7 +8,7 @@ import { formate, ratiosSur, SEUIL_AA } from "@/lib/contrast";
 import { CLAIR, ENCRES, SOMBRE, SURFACES, type Palette } from "@/lib/tokens";
 
 export const metadata: Metadata = {
-  title: "Système de design, Coiff'92",
+  title: "Système de design",
   description:
     "Palette, typographie et composants de la plateforme Coiff'92, avec les contrastes calculés.",
 };
