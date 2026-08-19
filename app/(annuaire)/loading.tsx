@@ -8,7 +8,15 @@ import { LoadingAnnounce, SkeletonRows } from "@/components/ui/states";
 
    Il devient visible dès que la source de données prend du temps, c'est à
    dire au passage sur Supabase. En local il ne s'affiche presque jamais,
-   ce qui est le comportement voulu, pas un oubli. */
+   ce qui est le comportement voulu, pas un oubli.
+
+   PIÈGE, ne pas remonter ce fichier à la racine de app/. Un loading.tsx
+   ouvre une frontière Suspense sur son segment ET tous ses enfants. La
+   réponse part alors en flux, l'entête HTTP est émis avant que le corps
+   soit rendu, et un notFound() appelé ensuite ne peut plus changer le
+   statut : les slugs inconnus de /salon et /reclamer répondaient 200 au
+   lieu de 404. D'où le groupe (annuaire), qui n'apparaît pas dans l'URL
+   mais limite la frontière à cette seule page. */
 export default function Chargement() {
   return (
     <div className="flex min-h-[100svh] flex-col">
