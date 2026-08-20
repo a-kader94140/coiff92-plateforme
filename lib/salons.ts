@@ -190,3 +190,13 @@ export function jourAParis(maintenant: Date = new Date()): number {
   const index = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(nom);
   return index === -1 ? maintenant.getDay() : index;
 }
+
+/** La date du jour à Paris, au format AAAA-MM-JJ. Même raison que
+ *  ci-dessus : un serveur à Washington refuserait comme « passée » une
+ *  date que le visiteur voit encore comme aujourd'hui. Le format canadien
+ *  est le seul que l'Intl produise déjà dans cet ordre. */
+export function dateAParis(maintenant: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(
+    maintenant,
+  );
+}

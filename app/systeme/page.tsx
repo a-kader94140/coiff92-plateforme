@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SegmentedRadio } from "@/components/ui/field";
 import { EmptyState, SkeletonRows } from "@/components/ui/states";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { FormShowcase } from "@/components/systeme/form-showcase";
 import { formate, ratiosSur, SEUIL_AA } from "@/lib/contrast";
+import { CRENEAUX } from "@/lib/demandes";
 import { CLAIR, ENCRES, SOMBRE, SURFACES, type Palette } from "@/lib/tokens";
 
 export const metadata: Metadata = {
@@ -219,6 +221,27 @@ export default function SystemePage() {
         chapeau="Libellé au-dessus, aide ou erreur en dessous. Jamais d'indication placée uniquement dans le champ : elle disparaît dès qu'on saisit."
       >
         <FormShowcase />
+      </Section>
+
+      <Section
+        titre="Choix segmenté"
+        chapeau="Pour deux à quatre options courtes qui se comparent d'un coup d'oeil. Au-delà, ou pour des libellés longs, on revient aux ronds du groupe exclusif. Trois signaux distinguent le segment retenu, l'aplat, le liseré et l'état coché : jamais la couleur seule."
+      >
+        <div className="flex flex-col gap-6 sm:max-w-[380px]">
+          <SegmentedRadio
+            legend="Créneau"
+            name="demo-creneau"
+            options={CRENEAUX}
+            defaultValue="apres_midi"
+            help="Le salon confirmera l'horaire exact."
+          />
+          <SegmentedRadio
+            legend="Créneau"
+            name="demo-creneau-erreur"
+            options={CRENEAUX}
+            error="Choisissez un créneau."
+          />
+        </div>
       </Section>
 
       <Section

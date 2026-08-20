@@ -108,6 +108,90 @@ export function Textarea({
   );
 }
 
+/* Variante segmentée du groupe exclusif, pour deux à quatre options
+   courtes qui se comparent d'un coup d'oeil : un créneau, un tri.
+
+   L'état retenu est peint par `:has(input:checked)` et non par une classe
+   calculée en React. La différence compte : sans JavaScript, le navigateur
+   coche quand même le bouton radio, et le segment se colore quand même.
+   Une classe calculée, elle, resterait figée sur le rendu initial.
+
+   Trois signaux distinguent le segment retenu, pas seulement la couleur :
+   l'aplat, le liseré intérieur, et l'état coché lu par les lecteurs
+   d'écran. */
+type SegmentedProps = {
+  legend: string;
+  name: string;
+  options: ReadonlyArray<{ value: string; label: string }>;
+  defaultValue?: string;
+  error?: string;
+  help?: string;
+};
+
+export function SegmentedRadio({
+  legend,
+  name,
+  options,
+  defaultValue,
+  error,
+  help,
+}: SegmentedProps) {
+  const id = useId();
+  const errorId = `${id}-error`;
+  const helpId = `${id}-help`;
+
+  return (
+    <fieldset className="flex flex-col border-0 p-0">
+      <legend className="mb-1.5 block p-0 text-[13px] font-medium text-text">
+        {legend}
+      </legend>
+      <div
+        aria-describedby={error ? errorId : help ? helpId : undefined}
+        className={cn(
+          "flex overflow-hidden rounded-md border",
+          error ? "border-accent" : "border-[var(--divider)]",
+        )}
+      >
+        {options.map((o, i) => (
+          <label
+            key={o.value}
+            className={cn(
+              "flex flex-1 cursor-pointer items-center justify-center px-3 py-2.5",
+              "text-sm text-text transition-colors duration-150",
+              i > 0 && "border-l border-[var(--divider)]",
+              "hover:bg-surface-2",
+              "has-[input:checked]:bg-[var(--accent-wash)]",
+              "has-[input:checked]:font-medium has-[input:checked]:text-accent-ink",
+              "has-[input:checked]:shadow-[inset_0_0_0_1px_var(--accent)]",
+              "has-[input:focus-visible]:outline has-[input:focus-visible]:-outline-offset-2",
+              "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-accent",
+              "has-[input:disabled]:cursor-not-allowed",
+            )}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={o.value}
+              defaultChecked={o.value === defaultValue}
+              className="sr-only"
+            />
+            {o.label}
+          </label>
+        ))}
+      </div>
+      {error ? (
+        <span id={errorId} role="alert" className="mt-1.5 text-[13px] text-accent-ink">
+          {error}
+        </span>
+      ) : help ? (
+        <span id={helpId} className="mt-1.5 text-[13px] text-muted-2">
+          {help}
+        </span>
+      ) : null}
+    </fieldset>
+  );
+}
+
 /* Groupe de choix exclusifs. Rendu en <fieldset> pour que le lecteur
    d'écran annonce l'intitulé du groupe avant les options. */
 type RadioGroupProps = {
