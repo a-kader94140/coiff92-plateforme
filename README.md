@@ -22,9 +22,13 @@ Aucune variable d'environnement pour l'instant : les données sont locales.
 |---|---|
 | `/` | L'annuaire : recherche, filtres commune et type, classement, 142 fiches |
 | `/salon/[slug]` | La fiche, en deux versions selon qu'elle est complétée ou non |
-| `/salon/[slug]/rendez-vous` | Route d'attente, le formulaire arrive avec sa maquette |
+| `/salon/[slug]/rendez-vous` | Le formulaire de demande, en page pleine |
+| la même, interceptée | Depuis la fiche, cette URL s'ouvre en panneau latéral par-dessus |
 | `/reclamer/[slug]` | Route d'attente, la connexion arrive avec sa maquette |
 | `/systeme` | Le guide de style, avec les contrastes calculés |
+
+Plus les états de la navigation : `not-found.tsx`, `error.tsx` et le squelette de
+chargement de l'annuaire.
 
 ## Architecture
 
@@ -32,11 +36,20 @@ Aucune variable d'environnement pour l'instant : les données sont locales.
 app/                    routes, toutes en composants serveur par défaut
   globals.css           les jetons du système, thèmes clair et sombre
   fonts.ts              les 3 familles, hébergées dans app/fonts/
+  (annuaire)/           groupe absent de l'URL, qui borne le loading.tsx
+  not-found.tsx         le 404
+  error.tsx             la panne, avec un bouton pour réessayer
+  salon/[slug]/
+    @panneau/           le créneau parallèle où s'affiche le panneau latéral
 components/
   ui/                   les composants du système de design
   annuaire/             ce qui est propre à la liste
+  rendez-vous/          l'entête, le formulaire et le panneau de la demande
 lib/
   salons.ts             LA couche de données, seul point à changer pour Supabase
+  demandes.ts           types, créneaux, bornes de date. N'IMPORTE PAS zod
+  demandes-schema.ts    la validation et la persistance, server-only
+  demandes-actions.ts   l'action serveur appelée par le formulaire
   contrast.ts           calcul WCAG, utilisé par le guide de style
   tokens.ts             les jetons en TypeScript, pour la documentation
 data/
@@ -51,6 +64,49 @@ arrive, ces deux fonctions deviennent des requêtes et rien d'autre ne bouge.
 **Les filtres vivent dans l'URL**, pas dans l'état React. Une recherche est
 partageable par lien, le bouton Retour fonctionne, et la page reste rendue côté
 serveur, donc indexable.
+
+## La demande de rendez-vous
+
+Une demande, pas une réservation. La plateforme ne tient pas l'agenda des salons :
+le visiteur envoie une demande, le salon vérifie ses disponibilités et rappelle.
+Un encart le dit **en tête du formulaire** et non en bas de page, sinon le
+visiteur ne le comprend qu'après l'envoi, et se présente devant une porte fermée.
+
+**Elle n'existe que sur les six fiches démo.** Le formulaire exige `complete` et
+au moins une prestation ; les 136 salons réels n'ont ni l'un ni l'autre et
+répondent `notFound()`. Ce n'est pas une panne, c'est la règle des données
+inventées appliquée jusqu'au bout : on ne propose pas de rendez-vous chez un
+commerçant qui n'a jamais donné ses prestations.
+
+**Une seule URL, deux présentations.** Depuis la fiche, un clic ouvre le
+formulaire en panneau latéral par-dessus, le visiteur garde sous les yeux les
+tarifs qu'il est en train de demander. En ouverture directe, au rafraîchissement
+ou depuis un lien partagé, l'interception ne joue pas et la page pleine répond.
+Les deux montent le même `FormulaireDemande`, aucun contenu n'est dupliqué.
+
+Le panneau est un `<dialog>` natif, pas un `<div>` : la touche Échap, le piège à
+focus et l'inertie du fond pour les lecteurs d'écran sont fournis par le
+navigateur. Refermer ne ferme rien au sens du routeur, c'est un retour arrière,
+donc la croix et le bouton Précédent font la même chose.
+
+### Où en est la persistance
+
+**Rien n'est enregistré aujourd'hui.** La validation est réelle et complète, mais
+`enregistrerDemande()` dans `demandes-schema.ts` est un talon qui se contente
+d'une trace en console hors production. La base n'existe pas encore.
+
+C'est assumé et le produit ne le cache pas au visiteur. Tant que
+`DEMANDES_ENREGISTREES` vaut `false`, l'écran de confirmation porte une mention
+« Démonstration, cette demande n'a été transmise à personne », posée juste sous
+la phrase qui annonce que le salon l'a reçue. Elle disparaît d'elle-même quand le
+drapeau passe à `true`.
+
+Au branchement de Supabase, deux points à changer et deux seulement :
+
+1. `enregistrerDemande()` devient un insert anonyme sur `booking_requests` sous RLS
+2. `DEMANDES_ENREGISTREES` passe à `true`
+
+Les composants ne bougent pas, exactement comme pour `chercherSalons()`.
 
 ## Les règles qu'on ne casse pas
 
@@ -78,6 +134,19 @@ d'un composant. À spécificité égale, Tailwind tranche par l'ordre dans la fe
 générée, pas par l'ordre dans la chaîne de classes : un `border-transparent` posé
 en base efface silencieusement le `border-divider` d'une variante.
 
+**zod ne descend jamais dans le navigateur.** `demandes-schema.ts` est marqué
+`server-only`, et `demandes.ts`, lu par le formulaire qui est un composant
+client, ne l'importe pas. Quand les deux étaient réunis, la seule route du
+rendez-vous emportait 83 kB de JavaScript de plus que les autres. La séparation
+est un choix de poids, pas de rangement.
+
+**Un `loading.tsx` ne remonte pas à la racine de `app/`.** Il ouvre une frontière
+Suspense sur son segment et tous ses enfants : la réponse part en flux, l'entête
+HTTP est émis avant le rendu du corps, et un `notFound()` appelé ensuite ne peut
+plus changer le statut. Les slugs inconnus de `/salon` et `/reclamer` répondaient
+200 au lieu de 404. D'où le groupe `(annuaire)`, invisible dans l'URL, qui borne
+la frontière à la seule page qui en a besoin.
+
 ## Écarts assumés par rapport aux maquettes
 
 Les maquettes viennent de Claude Design, projet « Coiff'92 ».
@@ -100,8 +169,11 @@ puis régénérer.
 
 ## Ce qui reste à faire
 
-- Formulaire de demande de rendez-vous, en attente de sa maquette
+- Enregistrer les demandes pour de bon : aujourd'hui elles sont validées puis
+  perdues, voir « Où en est la persistance »
 - Connexion par lien et espace du gérant, en attente de leur maquette
 - Bascule sur Supabase : schéma, politiques RLS, et le test de sécurité qui
   prouve qu'un compte ne peut pas lire les demandes d'un autre
+- Ouvrir la demande de rendez-vous au-delà des six fiches démo, ce qui suppose
+  que de vrais salons aient réclamé leur fiche et saisi leurs prestations
 - Mise en ligne sur Vercel
