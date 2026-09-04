@@ -49,6 +49,7 @@ components/
   rendez-vous/          l'entête, le formulaire et le panneau de la demande
 supabase/
   migrations/           le schéma et les politiques RLS, à rejouer dans l'ordre
+  pistes/               écrit, non appliqué. Rien ici n'est dans la base
 lib/
   salons.ts             LA couche de données, seul point à changer pour Supabase
   demandes.ts           types, créneaux, bornes de date. N'IMPORTE PAS zod
@@ -235,7 +236,9 @@ puis régénérer.
   arrête les automates génériques, pas quelqu'un qui vise ce site. Restent la
   limite par IP et le refus des doublons en base, tous deux écartés pour
   l'instant : se protéger d'un problème qu'on n'a pas encore, c'est du travail
-  immobilisé
+  immobilisé. Le refus des doublons est écrit et prêt dans
+  `supabase/pistes/doublons.sql`, avec le complément applicatif à ne pas
+  oublier le jour où on l'applique
 - RGPD : durée de conservation des demandes, information des personnes et
   suppression. La question s'est ouverte le jour où de vraies coordonnées ont
   commencé à être stockées
