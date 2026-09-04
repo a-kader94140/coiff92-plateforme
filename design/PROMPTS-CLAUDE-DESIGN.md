@@ -60,6 +60,11 @@ accent #e9694e, texte posé sur l'accent #101113
 
 Contrainte non négociable : tous les couples texte sur fond passent le contraste WCAG AA
 de 4,5:1. Vérifie-le, notamment sur les gris les plus clairs posés sur une surface.
+Distingue deux usages de l'accent, l'aplat et le texte. #b8341a convient aux aplats et
+aux bordures, mais pose en TEXTE sur la surface secondaire il tombe a 4,31:1. Prevois
+donc une seconde valeur pour le texte en accent, #a92e17, qui tient 4,94:1.
+Ne laisse aucune case du tableau de contraste vide. Si un couple ne passe pas, corrige
+la valeur au lieu d'ecarter la case.
 
 TYPOGRAPHIE
 Titres : Clash Display 600. Cette police est dessinée serré et son espace mot est étroit.
@@ -242,6 +247,16 @@ permet de faire, et demande l'e-mail professionnel.
 Prévois l'état d'une fiche déjà réclamée par quelqu'un d'autre, avec une issue proposée
 plutôt qu'un cul-de-sac.
 
+
+RAPPELS DU SYSTEME, deja oublies une fois
+Les libelles sont au-dessus des champs. Jamais d'intitule qui ne vive que dans le champ,
+ni dans la premiere option d'une liste deroulante : il disparait des qu'on saisit, et un
+lecteur d'ecran n'annonce plus rien.
+Pas de pastille de couleur ronde devant un element de liste. Un statut ou un marqueur se
+distingue par un badge encadre, lisible sans percevoir les couleurs.
+Le texte en couleur d'accent utilise #a92e17 en theme clair et non #b8341a, qui tombe a
+4,31:1 pose sur la surface secondaire. Les aplats et les bordures, eux, gardent #b8341a.
+
 Montre le rendu à 1440px et à 390px, dans les deux thèmes.
 ```
 
@@ -279,6 +294,16 @@ Les horaires se règlent par jour, avec la possibilité de marquer un jour ferm�
 Un aperçu de ce que verra le public, et l'indication que des modifications ne sont pas
 encore enregistrées.
 
+
+RAPPELS DU SYSTEME, deja oublies une fois
+Les libelles sont au-dessus des champs. Jamais d'intitule qui ne vive que dans le champ,
+ni dans la premiere option d'une liste deroulante : il disparait des qu'on saisit, et un
+lecteur d'ecran n'annonce plus rien.
+Pas de pastille de couleur ronde devant un element de liste. Un statut ou un marqueur se
+distingue par un badge encadre, lisible sans percevoir les couleurs.
+Le texte en couleur d'accent utilise #a92e17 en theme clair et non #b8341a, qui tombe a
+4,31:1 pose sur la surface secondaire. Les aplats et les bordures, eux, gardent #b8341a.
+
 Montre le rendu à 1440px et à 390px, dans les deux thèmes.
 ```
 
@@ -296,5 +321,8 @@ Passe cette liste, elle m'évitera de porter en code des défauts qu'on paiera e
       passant
 - [ ] La fiche non réclamée, version B, n'a pas l'air cassée
 - [ ] Aucun tiret cadratin dans les textes des maquettes
+- [ ] Aucun champ dont l'intitulé ne vive que dans le champ ou dans la première
+      option d'une liste déroulante
+- [ ] Aucune pastille de couleur ronde devant un élément de liste
 - [ ] Les chiffres sont bien en monospace et alignés
 - [ ] Un seul accent vermillon, aucune autre couleur n'est apparue en route
