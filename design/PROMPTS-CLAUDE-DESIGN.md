@@ -2,6 +2,9 @@
 
 ## Mode d'emploi
 
+- **Le projet, c'est celui-ci :** https://claude.ai/design/p/780bd329-ed9b-43c4-aceb-1dd99606c2f4
+  Les prompts 1 à 4 y sont déjà passés. Rouvre-le pour les suivants, ne repars pas
+  d'un projet neuf.
 - **Un seul projet Claude Design** pour les 6 prompts, dans l'ordre. Le prompt 1 pose le
   système, les suivants s'appuient dessus. Si tu les mets dans des projets séparés,
   chaque écran repartira dans une direction différente.
