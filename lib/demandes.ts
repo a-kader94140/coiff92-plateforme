@@ -98,10 +98,11 @@ export function bornesDate(): { min: string; max: string } {
   return { min, max: dateHorizon(min) };
 }
 
-/** Faux tant que la couture d'enregistrement est un talon. L'écran de
- *  confirmation s'en sert pour ne pas affirmer qu'un salon a reçu quelque
- *  chose alors que rien n'est parti. À passer à vrai avec Supabase. */
-export const DEMANDES_ENREGISTREES = false;
+/** Vrai depuis le branchement de Supabase : une demande envoyée est
+ *  réellement enregistrée. L'écran de confirmation s'en sert pour savoir
+ *  s'il peut affirmer que le salon a reçu quelque chose. Repasser à faux
+ *  si l'enregistrement redevient un talon, jamais par confort. */
+export const DEMANDES_ENREGISTREES = true;
 
 /* ─────────────────────────  mise en forme  ───────────────────────── */
 

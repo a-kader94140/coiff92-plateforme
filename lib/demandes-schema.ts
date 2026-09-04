@@ -2,6 +2,7 @@ import "server-only";
 import { z } from "zod";
 import { dateAParis, type Salon } from "@/lib/salons";
 import { dateHorizon, formatDateLongue } from "@/lib/demandes";
+import { clientSupabase } from "@/lib/supabase";
 
 /* La validation, côté serveur uniquement.
 
@@ -73,23 +74,35 @@ export type DemandeValide = z.infer<ReturnType<typeof schemaDemande>>;
 
 /* ─────────────────────────  persistance  ───────────────────────── */
 
-/* LA COUTURE. Aujourd'hui la demande n'est enregistrée nulle part : la
-   base n'existe pas encore. Cette fonction est le seul endroit à changer
-   au branchement de Supabase, elle deviendra un insert anonyme sur
-   booking_requests sous RLS. Les composants n'auront pas à bouger, comme
-   pour chercherSalons(). Penser à passer DEMANDES_ENREGISTREES à vrai.
+/* L'enregistrement, branché sur Supabase.
 
-   Pas de latence simulée ici. L'état « envoi en cours » du formulaire est
-   réel, piloté par useActionState : il ne se voit presque pas en local et
-   se verra dès qu'il y aura un aller-retour réseau. C'est le comportement
-   voulu, pas un oubli. */
+   La demande part au statut « nouvelle », qui est le défaut de la
+   colonne : la politique RLS l'exige et refuse tout autre statut à
+   l'insertion. Personne ne s'accepte un rendez-vous tout seul.
+
+   Pas de .select() après l'insert. Ce serait une lecture, et aucune
+   politique de lecture n'existe sur cette table tant que l'espace
+   gérant n'est pas là. L'insert seul n'en a pas besoin.
+
+   Les erreurs remontent telles quelles : envoyerDemande les rattrape et
+   dit au visiteur de réessayer, sans lui laisser croire qu'il a mal
+   saisi quelque chose. */
 export async function enregistrerDemande(
   salon: Salon,
   demande: DemandeValide,
 ): Promise<void> {
-  if (process.env.NODE_ENV !== "production") {
-    console.info(
-      `[demande] ${salon.slug} · ${demande.prestation} · ${demande.date} ${demande.creneau} · ${demande.email}`,
-    );
+  const { error } = await clientSupabase().from("demandes").insert({
+    salon_slug: salon.slug,
+    nom: demande.nom,
+    email: demande.email,
+    tel: demande.tel,
+    prestation: demande.prestation,
+    date_souhaitee: demande.date,
+    creneau: demande.creneau,
+    message: demande.message,
+  });
+
+  if (error) {
+    throw new Error(`Demande non enregistrée : ${error.message}`);
   }
 }

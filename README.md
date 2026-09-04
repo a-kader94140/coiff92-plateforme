@@ -14,7 +14,9 @@ npm run dev      # http://localhost:3000
 npm run build    # vérifie que la production compile
 ```
 
-Aucune variable d'environnement pour l'instant : les données sont locales.
+Deux variables d'environnement sont nécessaires depuis le branchement de
+Supabase. Copier `.env.example` en `.env.local` et renseigner l'URL du projet
+et la clé publiable. Les salons, eux, restent des données locales.
 
 ## Ce qui existe
 
@@ -45,10 +47,13 @@ components/
   ui/                   les composants du système de design
   annuaire/             ce qui est propre à la liste
   rendez-vous/          l'entête, le formulaire et le panneau de la demande
+supabase/
+  migrations/           le schéma et les politiques RLS, à rejouer dans l'ordre
 lib/
   salons.ts             LA couche de données, seul point à changer pour Supabase
   demandes.ts           types, créneaux, bornes de date. N'IMPORTE PAS zod
   demandes-schema.ts    la validation et la persistance, server-only
+  supabase.ts           le client Supabase, server-only lui aussi
   demandes-actions.ts   l'action serveur appelée par le formulaire
   contrast.ts           calcul WCAG, utilisé par le guide de style
   tokens.ts             les jetons en TypeScript, pour la documentation
@@ -91,22 +96,43 @@ donc la croix et le bouton Précédent font la même chose.
 
 ### Où en est la persistance
 
-**Rien n'est enregistré aujourd'hui.** La validation est réelle et complète, mais
-`enregistrerDemande()` dans `demandes-schema.ts` est un talon qui se contente
-d'une trace en console hors production. La base n'existe pas encore.
+**Les demandes sont enregistrées depuis le 04/09/2026.** `enregistrerDemande()`
+insère dans la table `demandes` de Supabase, et `DEMANDES_ENREGISTREES` vaut
+`true` : l'écran de confirmation ne porte plus la mention « Démonstration », et
+la phrase qui annonce que le salon a reçu la demande est devenue vraie.
 
-C'est assumé et le produit ne le cache pas au visiteur. Tant que
-`DEMANDES_ENREGISTREES` vaut `false`, l'écran de confirmation porte une mention
-« Démonstration, cette demande n'a été transmise à personne », posée juste sous
-la phrase qui annonce que le salon l'a reçue. Elle disparaît d'elle-même quand le
-drapeau passe à `true`.
+Le nom de la table est `demandes` et non `booking_requests` annoncé ici avant le
+branchement : tout le code du projet est en français, une seule table en anglais
+au milieu se paierait à chaque relecture.
 
-Au branchement de Supabase, deux points à changer et deux seulement :
+**La sécurité tient à RLS, pas au secret de la clé.** La clé publiable est
+publique par conception. La table porte donc exactement deux règles :
 
-1. `enregistrerDemande()` devient un insert anonyme sur `booking_requests` sous RLS
-2. `DEMANDES_ENREGISTREES` passe à `true`
+- une politique d'**insertion** ouverte au public, avec `with check (statut =
+  'nouvelle')` : personne ne s'accepte un rendez-vous tout seul
+- **aucune politique de lecture**, de modification ni de suppression. RLS refuse
+  par défaut : sans politique, la clé publiable ne voit rien, même en connaissant
+  un identifiant. Ces lignes portent des noms, e-mails et téléphones de vraies
+  personnes
 
-Les composants ne bougent pas, exactement comme pour `chercherSalons()`.
+L'insert ne fait volontairement **pas** de `.select()` en retour : ce serait une
+lecture, et il n'y a pas de politique pour ça.
+
+La lecture s'ouvrira avec l'espace gérant, restreinte au salon dont la personne
+connectée est gérante. Ne pas l'ouvrir « en attendant ».
+
+**Vérifié le 04/09/2026, sept contrôles sur l'API réelle :** insertion valide
+acceptée (201), table illisible alors qu'une ligne existe (`[]`), insertion au
+statut « acceptée » refusée par la politique, créneau inventé et nom trop court
+refusés par les contraintes de la base, modification et suppression de masse sans
+effet. Puis le formulaire soumis de bout en bout **sans JavaScript**.
+
+**Ce qui n'est pas encore protégé :** rien ne limite le nombre de demandes qu'un
+automate peut envoyer. Ce n'est pas une faille, c'est du spam, et c'est à traiter
+avant la mise en ligne.
+
+Le schéma et les politiques vivent dans `supabase/migrations/`. Ils sont la trace
+écrite de ce que la base contient : les rejouer suffit à la recréer ailleurs.
 
 ## Les règles qu'on ne casse pas
 
@@ -133,6 +159,12 @@ Deux jetons d'accent, à ne pas confondre :
 d'un composant. À spécificité égale, Tailwind tranche par l'ordre dans la feuille
 générée, pas par l'ordre dans la chaîne de classes : un `border-transparent` posé
 en base efface silencieusement le `border-divider` d'une variante.
+
+**La sécurité de la base ne repose pas sur le secret d'une clé.** La clé
+publiable est publique par conception. Une table sans politique RLS adaptée est
+une table publiée. N'ouvrir la lecture de `demandes` qu'avec l'espace gérant, et
+restreinte au salon de la personne connectée. Ne pas créer de clé secrète sans
+nécessité démontrée : elle ignore toutes les politiques.
 
 **zod ne descend jamais dans le navigateur.** `demandes-schema.ts` est marqué
 `server-only`, et `demandes.ts`, lu par le formulaire qui est un composant
@@ -182,11 +214,16 @@ puis régénérer.
 
 ## Ce qui reste à faire
 
-- Enregistrer les demandes pour de bon : aujourd'hui elles sont validées puis
-  perdues, voir « Où en est la persistance »
-- Connexion par lien et espace du gérant, en attente de leur maquette
-- Bascule sur Supabase : schéma, politiques RLS, et le test de sécurité qui
-  prouve qu'un compte ne peut pas lire les demandes d'un autre
+- Limiter les envois : l'insertion est ouverte au public, rien n'empêche un
+  automate d'envoyer mille demandes. À traiter avant la mise en ligne
+- RGPD : durée de conservation des demandes, information des personnes et
+  suppression. La question s'est ouverte le jour où de vraies coordonnées ont
+  commencé à être stockées
+- Connexion par lien et espace du gérant, en attente de leur maquette. C'est là
+  que s'ajoutera la politique de lecture, restreinte au salon dont la personne
+  connectée est gérante
+- Passer les salons en base à leur tour, pour que `salons.ts` cesse d'être un
+  fichier et que les gérants puissent éditer leur fiche
 - Ouvrir la demande de rendez-vous au-delà des six fiches démo, ce qui suppose
   que de vrais salons aient réclamé leur fiche et saisi leurs prestations
-- Mise en ligne sur Vercel
+- Mise en ligne sur Vercel, avec les deux variables d'environnement
