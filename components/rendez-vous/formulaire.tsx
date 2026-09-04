@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClass } from "@/components/ui/button";
 import { Field, Input, SegmentedRadio, Select, Textarea } from "@/components/ui/field";
 import {
   bornesDate,
@@ -160,18 +160,13 @@ function Confirmation({ salon, demande }: { salon: Salon; demande: DemandeValide
       <div className="flex flex-wrap gap-3">
         <Link
           href="/"
-          className="inline-flex items-center justify-center rounded-md bg-accent
-                     px-[22px] py-3 text-sm font-medium text-on-accent
-                     transition-colors duration-150 hover:bg-[var(--accent-hover)]
-                     active:scale-[0.98]"
+          className={buttonClass({ variant: "principal" })}
         >
           Retour à l&apos;annuaire
         </Link>
         <Link
           href={`/salon/${salon.slug}`}
-          className="inline-flex items-center justify-center rounded-md border
-                     border-[var(--divider)] px-[22px] py-3 text-sm font-medium
-                     text-text transition-colors duration-150 hover:bg-surface-2"
+          className={buttonClass({ variant: "secondaire" })}
         >
           Revoir la fiche du salon
         </Link>

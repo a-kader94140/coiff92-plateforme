@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClass } from "@/components/ui/button";
 
 /* Frontière d'erreur.
 
@@ -57,9 +57,7 @@ export default function Erreur({
           </Button>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-md border
-                       border-[var(--divider)] px-[22px] py-3 text-sm font-medium
-                       text-text transition-colors duration-150 hover:bg-surface-2"
+            className={buttonClass({ variant: "secondaire" })}
           >
             Revenir à l&apos;annuaire
           </Link>

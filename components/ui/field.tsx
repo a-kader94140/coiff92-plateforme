@@ -159,7 +159,7 @@ export function SegmentedRadio({
               "flex flex-1 cursor-pointer items-center justify-center px-3 py-2.5",
               "text-sm text-text transition-colors duration-150",
               i > 0 && "border-l border-[var(--divider)]",
-              "hover:bg-surface-2",
+              "hover:bg-[var(--surface-hover)]",
               "has-[input:checked]:bg-[var(--accent-wash)]",
               "has-[input:checked]:font-medium has-[input:checked]:text-accent-ink",
               "has-[input:checked]:shadow-[inset_0_0_0_1px_var(--accent)]",

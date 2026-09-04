@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "./cn";
 
 export type ButtonVariant = "principal" | "secondaire" | "discret" | "destructeur";
-export type ButtonSize = "md" | "sm";
+export type ButtonSize = "lg" | "md" | "sm";
 
 /* Les six états de la planche sont traités ici, mais quatre le sont par
    des pseudo-classes CSS plutôt que par des props : survol, appui, focus
@@ -20,7 +20,12 @@ const base =
   "active:scale-[0.98] disabled:opacity-[0.38] disabled:cursor-not-allowed " +
   "disabled:active:scale-100 cursor-pointer";
 
+/* `lg` nomme la taille du CTA de la fiche salon, qui existait déjà mais
+   en classes recopiées. La surcharger par className serait un piège : cn
+   concatène sans arbitrer, et deux `px-` concurrents se départagent sur
+   l'ordre de la feuille générée, pas sur celui de la chaîne. */
 const sizes: Record<ButtonSize, string> = {
+  lg: "text-[15px] px-6 py-3.5",
   md: "text-sm px-[22px] py-3",
   sm: "text-[13px] px-4 py-2",
 };
@@ -31,18 +36,47 @@ const variants: Record<ButtonVariant, string> = {
     "hover:bg-[var(--accent-hover)] active:bg-[var(--accent-active)]",
   secondaire:
     "border-[var(--divider)] bg-transparent text-text " +
-    "hover:bg-surface-2 active:border-accent",
+    "hover:bg-[var(--surface-hover)] active:bg-[var(--surface-active)] " +
+    "active:border-accent",
   discret:
     "border-transparent bg-transparent text-text " +
-    "hover:bg-surface-2 active:text-accent-ink",
+    "hover:bg-[var(--surface-hover)] active:bg-[var(--surface-active)] " +
+    "active:text-accent-ink",
+  /* L'appui ne renforce pas le voile, il bascule en aplat plein.
+     La planche proposait un voile à 16%, mesuré à 4,33:1 sur une
+     surface : sous le seuil AA. L'aplat tient 5,93:1 quel que soit le
+     fond, et distingue mieux l'appui du survol. */
   destructeur:
     "border-accent bg-transparent text-accent-ink hover:bg-[var(--accent-wash)] " +
-    "active:bg-[color-mix(in_srgb,var(--accent)_16%,transparent)]",
+    "active:bg-accent active:text-on-accent",
 };
 
 /* Le bouton discret a une marge intérieure plus courte : sans bordure ni
    aplat, la même marge le ferait paraître flottant. */
 const quietPadding = "px-4 py-3";
+
+/* Le style seul, sans le <button>.
+
+   Huit liens de navigation recopiaient ces classes à la main. Aucun n'avait
+   l'état d'appui, et le survol de quatre d'entre eux avait déjà divergé du
+   composant. Un <a> ne peut pas devenir un <button> sans casser la
+   navigation, donc c'est le style qui se partage, pas l'élément. */
+export function buttonClass({
+  variant = "principal",
+  size = "md",
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+} = {}) {
+  return cn(
+    base,
+    size === "md" && variant === "discret" ? quietPadding : sizes[size],
+    variants[variant],
+    className,
+  );
+}
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -66,9 +100,7 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        base,
-        size === "md" && variant === "discret" ? quietPadding : sizes[size],
-        variants[variant],
+        buttonClass({ variant, size }),
         loading && "cursor-progress opacity-75",
         className,
       )}

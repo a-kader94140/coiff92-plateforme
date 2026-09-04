@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Filtres } from "@/components/annuaire/filtres";
 import { SalonRow } from "@/components/annuaire/salon-row";
+import { buttonClass } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/states";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
@@ -70,9 +71,7 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
               action={
                 <Link
                   href="/"
-                  className="inline-flex items-center justify-center rounded-md border
-                             border-[var(--divider)] px-5 py-2.5 text-sm font-medium
-                             text-text transition-colors duration-150 hover:bg-surface-2"
+                  className={buttonClass({ variant: "secondaire", size: "sm" })}
                 >
                   Réinitialiser les filtres
                 </Link>

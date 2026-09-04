@@ -59,7 +59,8 @@ export function BoutonFermer() {
       aria-label="Fermer la demande de rendez-vous"
       className="flex size-9 shrink-0 cursor-pointer items-center justify-center
                  rounded-md border border-[var(--divider)] text-muted-1
-                 transition-colors duration-150 hover:bg-surface-2 hover:text-text"
+                 transition-colors duration-150 hover:bg-[var(--surface-hover)]
+                 hover:text-text active:bg-[var(--surface-active)]"
     >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path

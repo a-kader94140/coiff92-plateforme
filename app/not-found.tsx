@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { NB_SALONS } from "@/lib/salons";
 
@@ -31,10 +32,7 @@ export default function NotFound() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-md bg-accent
-                       px-[22px] py-3 text-sm font-medium text-on-accent
-                       transition-colors duration-150 hover:bg-[var(--accent-hover)]
-                       active:scale-[0.98]"
+            className={buttonClass({ variant: "principal" })}
           >
             Voir les {NB_SALONS} adresses
           </Link>

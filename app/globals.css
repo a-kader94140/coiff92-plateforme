@@ -17,6 +17,14 @@
   --surface: #e7e7e4;
   --surface-2: #dcdcd8;
 
+  /* ---- Étages de survol et d'appui ----
+     Portés depuis la planche du 04/09. Sans eux, le survol et l'appui
+     d'un bouton secondaire se peignaient du même aplat, seule la
+     bordure les distinguait. Le texte posé dessus tient 10,81:1 au
+     pire des cas. */
+  --surface-hover: #d5d5d1;
+  --surface-active: #cacac6;
+
   /* ---- Encres, thème clair ---- */
   --text: #17181a;
   --muted-1: #3d3f42;
@@ -61,6 +69,8 @@
   --bg: #101113;
   --surface: #191b1e;
   --surface-2: #23262a;
+  --surface-hover: #202327;
+  --surface-active: #2a2d32;
 
   --text: #f0efec;
   --muted-1: #c3c5c7;
@@ -83,6 +93,8 @@
     --bg: #101113;
     --surface: #191b1e;
     --surface-2: #23262a;
+    --surface-hover: #202327;
+    --surface-active: #2a2d32;
 
     --text: #f0efec;
     --muted-1: #c3c5c7;

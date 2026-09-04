@@ -34,61 +34,98 @@ function Section({
   );
 }
 
+/* Le nuancier, porté de la planche du 04/09.
+
+   Le tableau des ratios dit ce qui est lisible sur quoi, il ne montre
+   pas les surfaces elles-mêmes. Les quatre aplats du thème, côte à
+   côte, se comparent d'un coup d'oeil.
+
+   Les couleurs sont posées en style inline et non par des classes : la
+   carte du thème sombre doit s'afficher avec ses propres valeurs même
+   quand la page est en thème clair, et inversement. */
+function Nuancier({ palette }: { palette: Palette }) {
+  const cases = [...SURFACES(palette), { nom: "accent", hex: palette.accent }];
+  const filet = `color-mix(in srgb, ${palette.text} 14%, transparent)`;
+
+  return (
+    <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+      {cases.map((c) => (
+        <div
+          key={c.nom}
+          className="flex h-[76px] flex-col justify-end gap-0.5 rounded-sm border p-2.5"
+          style={{
+            background: c.hex,
+            borderColor: filet,
+            color: c.nom === "accent" ? palette.onAccent : palette.muted1,
+          }}
+        >
+          <span className="text-[11px] leading-none first-letter:uppercase">{c.nom}</span>
+          <span className="tabular text-[11px] leading-none">{c.hex}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function TablePalette({ palette, nom }: { palette: Palette; nom: string }) {
   const surfaces = SURFACES(palette);
   const encres = ENCRES(palette);
 
   return (
-    <div className="overflow-x-auto rounded-md border border-[var(--divider)]">
-      <table className="w-full min-w-[36rem] border-collapse text-left">
-        <caption className="px-4 pt-4 pb-3 text-left font-mono text-xs uppercase tracking-[0.06em] text-muted-2">
-          {nom}
-        </caption>
-        <thead>
-          <tr className="border-b border-[var(--hairline)]">
-            <th className="px-4 py-2 text-[13px] font-medium">Encre</th>
-            {surfaces.map((s) => (
-              <th key={s.nom} className="px-4 py-2 text-[13px] font-medium">
-                sur {s.nom}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {encres.map((e) => {
-            const ratios = ratiosSur(e.hex, surfaces);
-            return (
-              <tr key={e.jeton} className="border-b border-[var(--hairline)] last:border-0">
-                <td className="px-4 py-3">
-                  <span className="flex items-center gap-2.5">
-                    <span
-                      aria-hidden="true"
-                      className="size-5 shrink-0 rounded-sm border border-[var(--hairline)]"
-                      style={{ background: e.hex }}
-                    />
-                    <span>
-                      <span className="block text-[13px] font-medium">{e.nom}</span>
-                      <span className="tabular block text-[11px] text-muted-2">
-                        {e.hex}
+    <div>
+      <h3 className="mb-3 font-mono text-xs font-normal uppercase tracking-[0.06em] text-muted-2">
+        {nom}
+      </h3>
+      <Nuancier palette={palette} />
+      <div className="overflow-x-auto rounded-md border border-[var(--divider)]">
+        <table className="w-full min-w-[36rem] border-collapse text-left">
+          <caption className="sr-only">Contrastes du {nom.toLowerCase()}</caption>
+          <thead>
+            <tr className="border-b border-[var(--hairline)]">
+              <th className="px-4 py-2 text-[13px] font-medium">Encre</th>
+              {surfaces.map((s) => (
+                <th key={s.nom} className="px-4 py-2 text-[13px] font-medium">
+                  sur {s.nom}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {encres.map((e) => {
+              const ratios = ratiosSur(e.hex, surfaces);
+              return (
+                <tr key={e.jeton} className="border-b border-[var(--hairline)] last:border-0">
+                  <td className="px-4 py-3">
+                    <span className="flex items-center gap-2.5">
+                      <span
+                        aria-hidden="true"
+                        className="size-5 shrink-0 rounded-sm border border-[var(--hairline)]"
+                        style={{ background: e.hex }}
+                      />
+                      <span>
+                        <span className="block text-[13px] font-medium">{e.nom}</span>
+                        <span className="tabular block text-[11px] text-muted-2">
+                          {e.hex}
+                        </span>
                       </span>
                     </span>
-                  </span>
-                </td>
-                {ratios.map((r) => (
-                  <td key={r.fond} className="px-4 py-3">
-                    <span className="tabular text-[13px]">{formate(r.valeur)}</span>
-                    {!r.conforme && (
-                      <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.04em] text-accent-ink">
-                        sous le seuil
-                      </span>
-                    )}
                   </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  {ratios.map((r) => (
+                    <td key={r.fond} className="px-4 py-3">
+                      <span className="tabular text-[13px]">{formate(r.valeur)}</span>
+                      {!r.conforme && (
+                        <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.04em] text-accent-ink">
+                          sous le seuil
+                        </span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -122,7 +159,7 @@ const ECHELLE = [
   },
   {
     label: "Petite capitale monospace",
-    exemple: "Nouvelle demande",
+    exemple: "92100 · 30 min · 28 EUR",
     classe: "font-mono text-xs uppercase tracking-[0.06em] text-muted-2",
   },
 ];

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   formatDuree,
@@ -40,10 +41,10 @@ function lienCarte(salon: Salon) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adresse)}`;
 }
 
-const btnPrincipal =
-  "inline-flex items-center justify-center rounded-md bg-accent px-6 py-3.5 " +
-  "text-[15px] font-medium text-on-accent transition-colors duration-150 " +
-  "hover:bg-[var(--accent-hover)] active:scale-[0.98]";
+/* Le CTA de la fiche est volontairement plus grand que la taille md.
+   Cette taille porte désormais un nom dans le système, et ses états
+   viennent du composant au lieu d'être recopiés. */
+const btnPrincipal = buttonClass({ variant: "principal", size: "lg" });
 
 const etiquette =
   "m-0 mt-7 mb-3 text-[13px] font-medium uppercase tracking-[0.02em] text-muted-2";
@@ -182,9 +183,13 @@ function FicheNonReclamee({ salon }: { salon: Salon }) {
         </p>
         <Link
           href={`/reclamer/${salon.slug}`}
+          /* Contour accent sans être une action destructrice : le système n'a
+             pas de variante pour ce cas, d'où les classes en clair. Son appui
+             suit la même règle que le destructeur, un aplat plein. */
           className="inline-flex items-center justify-center rounded-md border border-accent
                      px-5 py-2.5 text-sm font-medium text-accent-ink transition-colors
-                     duration-150 hover:bg-[var(--accent-wash)]"
+                     duration-150 hover:bg-[var(--accent-wash)] active:bg-accent
+                     active:text-on-accent active:scale-[0.98]"
         >
           Réclamer cette fiche
         </Link>
