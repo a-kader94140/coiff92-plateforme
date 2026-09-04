@@ -2,13 +2,17 @@
 
 ## Mode d'emploi
 
-- **Le projet, c'est celui-ci :** https://claude.ai/design/p/780bd329-ed9b-43c4-aceb-1dd99606c2f4
-  Les prompts 1 à 4 y sont déjà passés. Rouvre-le pour les suivants, ne repars pas
-  d'un projet neuf.
+- **Le projet courant :** https://claude.ai/design/p/6cbb3f9e-cdf5-4a11-b1a3-ce0ab1c0d017
+  La série y est rejouée depuis le prompt 1. L'ancien projet,
+  `780bd329-ed9b-43c4-aceb-1dd99606c2f4`, reste la source des écrans déjà livrés :
+  ne plus y coller de prompt.
 - **Un seul projet Claude Design** pour les 6 prompts, dans l'ordre. Le prompt 1 pose le
   système, les suivants s'appuient dessus. Si tu les mets dans des projets séparés,
   chaque écran repartira dans une direction différente.
 - **Un prompt par message.** Ne les colle pas à la suite.
+- **En cas de contradiction entre une planche et le code déjà livré, le code gagne.**
+  Les jetons de `app/globals.css` ont été vérifiés au calcul de contraste, pas à
+  l'œil. Une planche qui les contredit se trompe.
 - Après le prompt 1, **regarde la planche avant de continuer**. Si la palette ou la
   typographie dérive, corrige à ce moment. Tout le reste en découlera.
 - Les noms, adresses et villes des prompts sont de **vraies données du site**. C'est
@@ -49,7 +53,9 @@ filets : le texte à 14% d'opacité, et à 26% pour les séparateurs marqués
 
 COULEURS, THEME SOMBRE
 fond #101113, surface #191b1e, surface secondaire #23262a
-texte #f0efec, gris secondaires #c3c5c7 puis #9a9da1 puis #83868a
+texte #f0efec, gris secondaires #c3c5c7 puis #9a9da1 puis #8b8e92
+Le dernier gris a deja ete corrige une fois : #83868a pose sur la surface
+secondaire tombait a 4,15:1. Ne le reprends pas, garde #8b8e92, qui tient 4,62:1.
 accent #e9694e, texte posé sur l'accent #101113
 
 Contrainte non négociable : tous les couples texte sur fond passent le contraste WCAG AA

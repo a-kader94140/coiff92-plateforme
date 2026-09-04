@@ -149,14 +149,20 @@ la frontière à la seule page qui en a besoin.
 
 ## Écarts assumés par rapport aux maquettes
 
-Les maquettes viennent de Claude Design, projet « Coiff'92 » :
-https://claude.ai/design/p/780bd329-ed9b-43c4-aceb-1dd99606c2f4
+Les maquettes viennent de Claude Design. Trois projets existent, à ne pas
+confondre :
 
-C'est **ce projet et pas un autre** qu'il faut rouvrir pour les prompts restants.
-Ne pas le confondre avec « Annuaire coiffeurs Hauts-de-Seine »
-(`a7eeb472-396a-40fe-b3e9-9a9607025a24`), qui est le projet du site statique.
-Un prompt collé ailleurs repart sur un autre système visuel, et il faut ensuite
-retraduire chaque jeton à la main : c'est ce qui est arrivé au prompt 4.
+| Projet | Ce qu'il sert |
+|---|---|
+| `6cbb3f9e-cdf5-4a11-b1a3-ce0ab1c0d017` | **Le courant.** Série rejouée depuis le prompt 1, portera les écrans restants |
+| `780bd329-ed9b-43c4-aceb-1dd99606c2f4` | L'ancien. Source des écrans déjà livrés |
+| `a7eeb472-396a-40fe-b3e9-9a9607025a24` | « Annuaire coiffeurs Hauts-de-Seine », le site statique. Rien à voir avec la plateforme |
+
+Adresse : `https://claude.ai/design/p/<uuid>`
+
+Un prompt collé dans le mauvais projet repart sur un autre système visuel, et il
+faut ensuite retraduire chaque jeton à la main. C'est ce qui est arrivé au
+prompt 4, revenu sur un système nommé Nocturne avec des données lyonnaises.
 
 | Maquette | Ce qui a été fait à la place | Pourquoi |
 |---|---|---|
