@@ -94,6 +94,23 @@ focus et l'inertie du fond pour les lecteurs d'écran sont fournis par le
 navigateur. Refermer ne ferme rien au sens du routeur, c'est un retour arrière,
 donc la croix et le bouton Précédent font la même chose.
 
+### Le piège à robots
+
+Le formulaire porte un champ « site_web » que personne ne voit : hors de
+l'écran pour l'oeil, `tabIndex` à -1 pour le clavier, `aria-hidden` pour les
+lecteurs d'écran, et `autoComplete` désactivé pour que le gestionnaire de mots
+de passe ne le remplisse pas à la place du visiteur. Un automate, lui, remplit
+tout ce qu'il trouve.
+
+S'il arrive rempli, la demande n'est pas enregistrée et le visiteur reçoit **la
+réponse d'un envoi réussi**. C'est délibéré : dire à un automate qu'il est
+repéré l'aide à s'adapter. Vérifié le 04/09/2026, les deux réponses sont
+identiques à la lettre près des données saisies.
+
+Ce n'est pas une barrière infranchissable, et ça n'a pas à l'être. L'objectif
+est de rendre l'abus plus coûteux que ce qu'il rapporte, et le seuil est bas
+contre un annuaire de coiffeurs.
+
 ### Où en est la persistance
 
 **Les demandes sont enregistrées depuis le 04/09/2026.** `enregistrerDemande()`
@@ -214,8 +231,11 @@ puis régénérer.
 
 ## Ce qui reste à faire
 
-- Limiter les envois : l'insertion est ouverte au public, rien n'empêche un
-  automate d'envoyer mille demandes. À traiter avant la mise en ligne
+- Limiter les envois plus sérieusement si un abus apparaît : le piège à robots
+  arrête les automates génériques, pas quelqu'un qui vise ce site. Restent la
+  limite par IP et le refus des doublons en base, tous deux écartés pour
+  l'instant : se protéger d'un problème qu'on n'a pas encore, c'est du travail
+  immobilisé
 - RGPD : durée de conservation des demandes, information des personnes et
   suppression. La question s'est ouverte le jour où de vraies coordonnées ont
   commencé à être stockées

@@ -220,6 +220,32 @@ export function FormulaireDemande({ salon }: { salon: Salon }) {
           désactivé n'est pas transmis. */}
       <input type="hidden" name="salon" value={salon.slug} />
 
+      {/* Le piège à robots, hors du fieldset pour la même raison.
+
+          Le champ est retiré des trois chemins par lesquels un humain
+          pourrait l'atteindre : hors de l'écran pour l'oeil, tabIndex à -1
+          pour le clavier, aria-hidden pour les lecteurs d'écran. Et
+          autoComplete désactivé, sans quoi un gestionnaire de mots de
+          passe le remplirait et ferait passer un vrai visiteur pour un
+          automate.
+
+          Le nom est choisi pour appâter : « site web » est exactement le
+          genre de champ qu'un automate a envie de remplir. */}
+      <div
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px overflow-hidden"
+      >
+        <label htmlFor="site_web">Ne remplissez pas ce champ</label>
+        <input
+          id="site_web"
+          name="site_web"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
+      </div>
+
       <fieldset disabled={enCours} className="m-0 flex flex-col gap-4 border-0 p-0">
         <legend className="sr-only">Vos coordonnées et le rendez-vous souhaité</legend>
 

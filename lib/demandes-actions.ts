@@ -57,6 +57,20 @@ export async function envoyerDemande(
     return { statut: "erreur", erreurs, valeurs };
   }
 
+  /* Le piège à robots. Le champ « site_web » est posé hors de l'écran et
+     masqué aux lecteurs d'écran : un visiteur ne peut ni le voir, ni
+     l'atteindre au clavier, ni l'entendre. S'il arrive rempli, c'est un
+     automate, qui remplit tout ce qu'il trouve.
+
+     On lui répond alors comme si tout allait bien, sans rien enregistrer.
+     Lui dire qu'il est repéré ne ferait que l'aider à s'adapter.
+
+     Le test vient après la validation, et non avant : un automate n'a pas
+     à apprendre plus vite qu'un visiteur ce que le serveur accepte. */
+  if (lire(form, "site_web").trim() !== "") {
+    return { statut: "succes", demande: analyse.data };
+  }
+
   try {
     await enregistrerDemande(salon, analyse.data);
   } catch {
