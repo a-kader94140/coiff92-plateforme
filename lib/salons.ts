@@ -58,7 +58,16 @@ export const LIBELLES_TYPE: Record<SalonType, string> = {
   mixte: "Mixte",
 };
 
-export type Tri = "ville" | "nom";
+/* Le troisième tri remonte les six fiches qui acceptent une demande de
+   rendez-vous. Sans lui, un visiteur venu pour ça doit les chercher à
+   l'oeil parmi 142 lignes. Porté de la planche du 04/09. */
+export type Tri = "ville" | "nom" | "complete";
+
+/* Les deux en-têtes du tri par complétude. « Autres adresses » et non
+   « fiches incomplètes » : les 136 salons réels ne sont pas des fiches
+   ratées, ce sont des commerces qui n'ont pas encore réclamé la leur. */
+const GROUPE_COMPLETES = "Fiches complètes";
+const GROUPE_AUTRES = "Autres adresses";
 
 export type Recherche = {
   q?: string;
@@ -96,7 +105,7 @@ export function estType(v: string | undefined): v is SalonType {
 }
 
 export function estTri(v: string | undefined): v is Tri {
-  return v === "ville" || v === "nom";
+  return v === "ville" || v === "nom" || v === "complete";
 }
 
 export function listeCommunes(): string[] {
@@ -121,17 +130,30 @@ export function chercherSalons({ q, ville, type, tri = "ville" }: Recherche): Re
     );
   });
 
-  const trie = [...retenus].sort((a, b) =>
-    tri === "ville"
-      ? parAlpha(a.city, b.city) || parAlpha(a.name, b.name)
-      : parAlpha(a.name, b.name),
-  );
+  const trie = [...retenus].sort((a, b) => {
+    if (tri === "ville") return parAlpha(a.city, b.city) || parAlpha(a.name, b.name);
+    /* Les complètes d'abord, puis l'ordre alphabétique dans chaque bloc.
+       Number() plutôt qu'une soustraction de booléens : `complete` est
+       optionnel, et undefined - undefined donne NaN, ce qui rendrait le
+       tri instable sans rien signaler. */
+    if (tri === "complete") {
+      return Number(!!b.complete) - Number(!!a.complete) || parAlpha(a.name, b.name);
+    }
+    return parAlpha(a.name, b.name);
+  });
 
-  /* Groupé par commune, ou par initiale quand on classe par nom : dans les
-     deux cas l'en-tête de groupe dit où on en est dans la liste. */
+  /* L'en-tête de groupe dit toujours où on en est dans la liste : la
+     commune, l'initiale, ou le bloc de complétude selon le tri choisi. */
   const parCle = new Map<string, Salon[]>();
   for (const s of trie) {
-    const cle = tri === "ville" ? s.city : (fold(s.name)[0] ?? "#").toUpperCase();
+    const cle =
+      tri === "ville"
+        ? s.city
+        : tri === "complete"
+          ? s.complete
+            ? GROUPE_COMPLETES
+            : GROUPE_AUTRES
+          : (fold(s.name)[0] ?? "#").toUpperCase();
     const groupe = parCle.get(cle);
     if (groupe) groupe.push(s);
     else parCle.set(cle, [s]);

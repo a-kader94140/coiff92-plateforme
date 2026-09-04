@@ -115,6 +115,7 @@ export function Filtres({ q, ville, type, tri, communes, total, nbCommunes }: Pr
       >
         <option value="ville">Classer par ville</option>
         <option value="nom">Classer par nom</option>
+        <option value="complete">Fiches complètes d&apos;abord</option>
       </select>
 
       <p

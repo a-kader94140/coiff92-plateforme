@@ -221,7 +221,10 @@ prompt 4, revenu sur un système nommé Nocturne avec des données lyonnaises.
 | Six copies figées d'un bouton par état | Vrais états CSS | Survol, appui et focus se testent, ils ne se dessinent pas |
 | « Demander un rendez-vous » en `<div>` cliquable | La ligne entière est un `<Link>` | Un div ne se tabule pas et n'annonce rien |
 | Commune répétée à chaque ligne | Retirée quand on classe par ville | Elle est déjà l'en-tête juste au-dessus |
-| Tri « Pertinence, Alphabétique, Distance » | « Par ville » et « par nom » | Sans coordonnées ni signal de classement, les deux autres seraient décoratifs |
+| Tri « Pertinence, Alphabétique, Distance » | « Par ville », « par nom », « fiches complètes d'abord » | Sans coordonnées ni signal de classement, pertinence et distance seraient décoratifs. Le troisième vient de la planche du 04/09 |
+| Pastille de couleur ronde devant « Fiche complète » | Un badge encadré | Le prompt 1 proscrit les pastilles décoratives devant les éléments de liste, la planche l'a oublié |
+| « Demander un rendez-vous » sur chaque ligne | « Voir la fiche » | Seules 6 fiches sur 142 acceptent une demande, les 136 autres répondraient 404 |
+| Champs sans libellé, l'intitulé dans la liste déroulante | Un `label` visuellement masqué | Même règle du prompt 1 : jamais d'indication placée uniquement dans le champ |
 | Jour courant en `--accent` sur `--surface-2` | `--accent-ink` | 4,31:1 contre 4,77:1, le premier est sous le seuil |
 
 ## Régénérer les données réelles

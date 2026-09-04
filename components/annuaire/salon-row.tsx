@@ -43,9 +43,11 @@ export function SalonRow({ salon, tri }: { salon: Salon; tri: Tri }) {
 
           {/* Classé par ville, la commune est déjà l'en-tête juste au-dessus :
               la répéter à chaque ligne ajoutait deux séparateurs et aucune
-              information. Classé par nom, elle redevient nécessaire. */}
+              information. Sous tout autre classement, par nom comme par
+              complétude, l'en-tête ne la donne plus et elle redevient
+              nécessaire. */}
           <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-1">
-            {tri === "nom" && <span>{salon.city},</span>}
+            {tri !== "ville" && <span>{salon.city},</span>}
             <span>{salon.street || "Adresse non relevée"}</span>
             <span className="tabular text-[13px] text-muted-2">{salon.postalCode}</span>
           </span>
