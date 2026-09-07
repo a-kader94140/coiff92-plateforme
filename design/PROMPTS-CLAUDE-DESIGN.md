@@ -238,6 +238,9 @@ Trois états : le formulaire, l'attente après envoi avec une explication claire
 la personne doit faire maintenant, et l'erreur si l'adresse est invalide.
 Cet écran doit rassurer un gérant de salon qui n'est pas à l'aise avec l'informatique.
 Pas de jargon.
+N'annonce aucune durée de validité chiffrée pour le lien, pas de « valable 15 minutes ».
+Cette durée se règle côté serveur et n'est pas encore fixée. Un chiffre écrit dans la
+maquette finit dans le code et ment ensuite au gérant.
 
 RECLAMER SA FICHE
 Écran atteint depuis une fiche non réclamée. Exemple : Brigitte Coiffure, 70 rue Adolphe
@@ -246,6 +249,9 @@ Il rappelle de quel salon il s'agit, explique en une phrase ce que réclamer sa 
 permet de faire, et demande l'e-mail professionnel.
 Prévois l'état d'une fiche déjà réclamée par quelqu'un d'autre, avec une issue proposée
 plutôt qu'un cul-de-sac.
+Cette issue doit mener quelque part de réel. Coiff'92 n'a ni adresse de contact ni
+numéro de téléphone : n'en invente pas. Un bouton « Contacter l'équipe » qui ne pointe
+nulle part a déjà été produit une fois, et il a fallu le porter tel quel.
 
 
 RAPPELS DU SYSTEME, deja oublies une fois
