@@ -127,7 +127,14 @@ function FicheComplete({ salon }: { salon: Salon }) {
                         }`}
                       >
                         {JOURS[jour]}
-                        {cejour && <span className="sr-only"> , aujourd&apos;hui</span>}
+                        {/* Visible, et pas seulement pour les lecteurs d'écran : le
+                            gras et l'aplat disent « ce jour est particulier »,
+                            ils ne disent pas lequel. */}
+                        {cejour && (
+                          <span className="font-normal text-muted-2">
+                            , aujourd&apos;hui
+                          </span>
+                        )}
                       </span>
                       <span
                         className={`tabular text-[13px] ${
@@ -135,7 +142,7 @@ function FicheComplete({ salon }: { salon: Salon }) {
                         }`}
                       >
                         {h?.ouvre && h.ferme
-                          ? `${formatHeure(h.ouvre)}, ${formatHeure(h.ferme)}`
+                          ? `${formatHeure(h.ouvre)} à ${formatHeure(h.ferme)}`
                           : "Fermé"}
                       </span>
                     </li>
@@ -236,7 +243,10 @@ export default async function FicheSalon({ params }: { params: Params }) {
         <div className="mb-7 border-b border-[var(--hairline)] pb-6">
           <div className="mb-2 flex flex-wrap items-center gap-3">
             <h1 className="m-0 text-[clamp(28px,4vw,38px)] leading-tight">{salon.name}</h1>
-            {salon.demo && <Badge tone="demo" />}
+            {/* Libellé long ici seulement. Sur la fiche, le visiteur découvre le
+                salon et doit comprendre du premier coup que les tarifs affichés
+                sont inventés. Dans la liste, « Démo » suffit et la place manque. */}
+            {salon.demo && <Badge tone="demo">Démo, salon fictif</Badge>}
           </div>
           <p className="m-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-muted-1">
             <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted-2">
