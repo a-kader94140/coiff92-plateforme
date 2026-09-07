@@ -13,7 +13,14 @@ import type { Salon } from "@/lib/salons";
    relevé réel, vérifié à la création.
 
    Les tarifs sont ceux qu'on observe couramment dans le département en
-   2026, ils servent à juger la mise en page, pas à informer. */
+   2026, ils servent à juger la mise en page, pas à informer. 
+   PLUS LU A L EXECUTION depuis la migration 0003. Le site sert les salons
+   depuis Supabase, via lib/salons-data.ts. Ce fichier reste la source
+   versionnee : il alimente supabase/migrations/0003_donnees_salons.sql,
+   que produit `node supabase/outils/generer-0003.js`. Corriger une ligne
+   ici ne change RIEN au site tant que la migration na pas ete regeneree
+   puis rejouee dans lediteur SQL.
+*/
 
 export const SALONS_DEMO: Salon[] = [
   {

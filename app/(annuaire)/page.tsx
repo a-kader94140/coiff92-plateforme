@@ -4,15 +4,8 @@ import { SalonRow } from "@/components/annuaire/salon-row";
 import { buttonClass } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/states";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import {
-  chercherSalons,
-  estTri,
-  estType,
-  listeCommunes,
-  NB_DEMO,
-  NB_REELS,
-  NB_SALONS,
-} from "@/lib/salons";
+import { estTri, estType } from "@/lib/salons";
+import { chercherSalons, compterSalons, listeCommunes } from "@/lib/salons-data";
 
 type Params = Promise<Record<string, string | string[] | undefined>>;
 
@@ -26,14 +19,22 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
   const typeBrut = premier(sp.type);
   const triBrut = premier(sp.tri);
 
-  const communes = listeCommunes();
+  const communes = await listeCommunes();
   /* Un paramètre d'URL vient du visiteur : on ne fait confiance qu'aux
      valeurs qu'on reconnaît. */
   const ville = communes.includes(villeBrute) ? villeBrute : "";
   const type = estType(typeBrut) ? typeBrut : undefined;
   const tri = estTri(triBrut) ? triBrut : "ville";
 
-  const { groupes, total, communes: nbCommunes } = chercherSalons({ q, ville, type, tri });
+  /* Trois lectures, une seule requête : toutLAnnuaire() est mise en cache
+     pour la durée de la requête HTTP. */
+  const { groupes, total, communes: nbCommunes } = await chercherSalons({
+    q,
+    ville,
+    type,
+    tri,
+  });
+  const comptes = await compterSalons();
   const filtre = Boolean(q || ville || type);
 
   return (
@@ -99,16 +100,16 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
 
       <footer className="border-t border-[var(--hairline)] px-5 py-8 md:px-6">
         <p className="m-0 max-w-[70ch] text-[13px] leading-relaxed text-muted-2">
-          {NB_REELS} adresses relevées en août 2026 à partir d&apos;annuaires publics.
-          La liste n&apos;est pas exhaustive, les Hauts-de-Seine comptent plusieurs
-          milliers de salons. Vérifiez les horaires auprès du salon avant de vous
-          déplacer. Les {NB_DEMO} fiches marquées « Démo » sont fictives et servent à
-          présenter la plateforme.
+          {comptes.reels} adresses relevées en août 2026 à partir d&apos;annuaires
+          publics. La liste n&apos;est pas exhaustive, les Hauts-de-Seine comptent
+          plusieurs milliers de salons. Vérifiez les horaires auprès du salon avant
+          de vous déplacer. Les {comptes.demo} fiches marquées « Démo » sont fictives
+          et servent à présenter la plateforme.
           {filtre && (
             <>
               {" "}
               <Link href="/" className="text-accent-ink underline underline-offset-2">
-                Voir les {NB_SALONS} adresses
+                Voir les {comptes.total} adresses
               </Link>
             </>
           )}

@@ -4,13 +4,13 @@ import { notFound } from "next/navigation";
 import { EnteteDemande } from "@/components/rendez-vous/entete";
 import { FormulaireDemande } from "@/components/rendez-vous/formulaire";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { trouverSalon } from "@/lib/salons";
+import { trouverSalon } from "@/lib/salons-data";
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   /* Le suffixe « | Coiff'92 » est ajouté par le gabarit de titre du layout,
      ne pas l'écrire ici sous peine de le voir deux fois. */
   if (!salon) return { title: "Demande de rendez-vous" };
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function DemandeRendezVous({ params }: { params: Params }) {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   /* Un salon qui n'a pas complété sa fiche n'a ni prestations ni moyen de
      répondre : le formulaire n'existe pas pour lui. */
   if (!salon || !salon.complete || !salon.prestations?.length) notFound();

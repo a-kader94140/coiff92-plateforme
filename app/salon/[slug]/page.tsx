@@ -12,15 +12,15 @@ import {
   JOURS,
   LIBELLES_TYPE,
   ORDRE_SEMAINE,
-  trouverSalon,
   type Salon,
 } from "@/lib/salons";
+import { trouverSalon } from "@/lib/salons-data";
 
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   /* Le suffixe « | Coiff'92 » est ajouté par le gabarit de titre du layout,
      ne pas l'écrire ici sous peine de le voir deux fois. */
   if (!salon) return { title: "Salon introuvable" };
@@ -209,7 +209,7 @@ function FicheNonReclamee({ salon }: { salon: Salon }) {
 
 export default async function FicheSalon({ params }: { params: Params }) {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   if (!salon) notFound();
 
   const complete = Boolean(salon.complete && salon.prestations?.length);

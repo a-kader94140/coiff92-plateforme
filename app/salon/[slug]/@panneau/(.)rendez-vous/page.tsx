@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { EnteteDemande } from "@/components/rendez-vous/entete";
 import { FormulaireDemande } from "@/components/rendez-vous/formulaire";
 import { BoutonFermer, PanneauModal } from "@/components/rendez-vous/panneau";
-import { trouverSalon } from "@/lib/salons";
+import { trouverSalon } from "@/lib/salons-data";
 
 /* La route interceptrice.
 
@@ -21,7 +21,7 @@ type Params = Promise<{ slug: string }>;
 
 export default async function PanneauRendezVous({ params }: { params: Params }) {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   if (!salon || !salon.complete || !salon.prestations?.length) notFound();
 
   return (

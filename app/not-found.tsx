@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { NB_SALONS } from "@/lib/salons";
 
 /* Un 404 doit rendre la main, pas constater l'échec. Il propose donc la
-   seule action qui remet le visiteur sur les rails : revenir à l'annuaire. */
+   seule action qui remet le visiteur sur les rails : revenir à l'annuaire.
+
+   Le bouton annonçait le nombre d'adresses. Ce nombre vit désormais en
+   base, et une page d'erreur qui interroge la base peut échouer à son
+   tour : le visiteur récolterait un 500 à la place de son 404. Cette page
+   ne dépend donc de rien. */
 export default function NotFound() {
   return (
     <div className="flex min-h-[100svh] flex-col">
@@ -34,7 +38,7 @@ export default function NotFound() {
             href="/"
             className={buttonClass({ variant: "principal" })}
           >
-            Voir les {NB_SALONS} adresses
+            Revenir à l&apos;annuaire
           </Link>
         </div>
       </main>

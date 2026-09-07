@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { LIBELLES_TYPE, trouverSalon } from "@/lib/salons";
+import { LIBELLES_TYPE } from "@/lib/salons";
+import { trouverSalon } from "@/lib/salons-data";
 
 /* Étape suivante : la réclamation de fiche et la connexion par lien,
    dont la maquette n'est pas encore portée. Cette page existe pour que le
@@ -13,13 +14,13 @@ type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   return { title: salon ? `Réclamer ${salon.name}` : "Réclamer une fiche" };
 }
 
 export default async function ReclamerFiche({ params }: { params: Params }) {
   const { slug } = await params;
-  const salon = trouverSalon(slug);
+  const salon = await trouverSalon(slug);
   if (!salon) notFound();
 
   return (

@@ -1,5 +1,14 @@
-import { SALONS as SALONS_REELS, COMMUNES as COMMUNES_REELLES } from "@/data/salons";
-import { SALONS_DEMO } from "@/data/demo";
+/* Les types et la mise en forme, et RIEN d'autre.
+
+   Ce fichier est importé par des composants client (les filtres, la ligne
+   d'annuaire, le formulaire). Il ne doit donc contenir aucun accès à la
+   base : une seule ligne de Supabase ici, et tout part dans le navigateur
+   avec elle. Les requêtes vivent dans lib/salons-data.ts, marqué
+   « server-only ».
+
+   Le tri et le regroupement restent ici bien qu'ils servent côté serveur :
+   ce sont des fonctions pures sur un tableau, elles se lisent et se
+   vérifient mieux à côté des types qu'elles manipulent. */
 
 export type SalonType = "barber" | "coiffeur" | "mixte";
 
@@ -17,6 +26,8 @@ export type Horaire = {
 };
 
 export type Salon = {
+  /** L'identifiant en base. Absent tant qu'un salon n'en vient pas. */
+  id?: string;
   slug: string;
   name: string;
   city: string;
@@ -27,6 +38,8 @@ export type Salon = {
   complete?: boolean;
   /** Fiche fictive de démonstration, signalée à l'écran par un badge. */
   demo?: boolean;
+  /** Vrai si un gérant a pris la fiche. On ne dit jamais lequel. */
+  reclamee?: boolean;
 
   /* Champs de la fiche complète. Absents sur les 136 salons réels, dont
      nous ne connaissons que le nom, l'adresse et le type. */
@@ -35,22 +48,6 @@ export type Salon = {
   prestations?: Prestation[];
   horaires?: Horaire[];
 };
-
-/* Les salons de démonstration rejoignent le relevé réel dans une seule
-   liste : l'annuaire ne fait pas deux requêtes, et le badge « Démo »
-   suffit à les distinguer à l'écran. */
-const SALONS: Salon[] = [...SALONS_REELS, ...SALONS_DEMO];
-
-const COMMUNES: string[] = [
-  ...new Set([...COMMUNES_REELLES, ...SALONS_DEMO.map((s) => s.city)]),
-].sort((a, b) => a.localeCompare(b, "fr"));
-
-/** Nombre total de fiches publiées, démonstration comprise. */
-export const NB_SALONS = SALONS.length;
-/** Les adresses réellement relevées et vérifiées. */
-export const NB_REELS = SALONS_REELS.length;
-/** Les fiches fictives ajoutées pour présenter la plateforme. */
-export const NB_DEMO = SALONS_DEMO.length;
 
 export const LIBELLES_TYPE: Record<SalonType, string> = {
   barber: "Barber",
@@ -108,17 +105,26 @@ export function estTri(v: string | undefined): v is Tri {
   return v === "ville" || v === "nom" || v === "complete";
 }
 
-export function listeCommunes(): string[] {
-  return COMMUNES;
-}
+/* Filtre, trie et regroupe une liste déjà en mémoire.
 
-/* Le jour où la base arrive, seule cette fonction change : elle devient une
-   requête Supabase avec les mêmes filtres et le même retour. Les composants
-   n'ont pas à bouger. */
-export function chercherSalons({ q, ville, type, tri = "ville" }: Recherche): Resultat {
+   Le commentaire qui était ici annonçait que « le jour où la base arrive,
+   seule cette fonction change ». À moitié vrai : les filtres et le tri
+   n'ont pas bougé d'une ligne, mais la fonction a dû quitter le fichier,
+   parce que trois composants client importent ce module pour ses types.
+
+   Le filtrage reste en TypeScript et non en SQL, pour une raison précise :
+   fold() ignore les accents, « asnieres » doit trouver « Asnières ». Un
+   ilike Postgres ne le fait pas sans l'extension unaccent. À 142 fiches,
+   tout charger coûte moins qu'un index de recherche mal posé. Le jour où
+   l'annuaire dépasse quelques milliers de lignes, c'est ici qu'il faudra
+   basculer, avec une colonne dénormalisée déjà repliée côté base. */
+export function grouper(
+  salons: Salon[],
+  { q, ville, type, tri = "ville" }: Recherche,
+): Resultat {
   const terme = q ? fold(q.trim()) : "";
 
-  const retenus = SALONS.filter((s) => {
+  const retenus = salons.filter((s) => {
     if (ville && s.city !== ville) return false;
     if (type && s.type !== type) return false;
     if (!terme) return true;
@@ -164,10 +170,6 @@ export function chercherSalons({ q, ville, type, tri = "ville" }: Recherche): Re
     total: trie.length,
     communes: new Set(trie.map((s) => s.city)).size,
   };
-}
-
-export function trouverSalon(slug: string): Salon | undefined {
-  return SALONS.find((s) => s.slug === slug);
 }
 
 /* ─────────────────────────  mise en forme  ───────────────────────── */

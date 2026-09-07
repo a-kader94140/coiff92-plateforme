@@ -2,7 +2,7 @@
 
 import { enregistrerDemande, schemaDemande } from "@/lib/demandes-schema";
 import type { EtatEnvoi, Valeurs } from "@/lib/demandes";
-import { trouverSalon } from "@/lib/salons";
+import { trouverSalon } from "@/lib/salons-data";
 
 /* L'action vit dans lib/ et non dans le dossier de la route : deux routes
    l'utilisent, la page pleine et le panneau qui l'intercepte.
@@ -34,7 +34,7 @@ export async function envoyerDemande(
   /* Le slug arrive d'un champ caché, donc du navigateur, donc d'une
      source à qui on ne fait pas confiance. On le revérifie ici : c'est le
      serveur qui décide quel salon existe et lequel accepte des demandes. */
-  const salon = trouverSalon(lire(form, "salon"));
+  const salon = await trouverSalon(lire(form, "salon"));
   if (!salon || !salon.complete) {
     return {
       statut: "erreur",

@@ -8,6 +8,13 @@
    leurs champs verifies : nom, commune, code postal, rue, type. Aucun tarif,
    horaire ou description n'est inventé pour eux. Les fiches enrichies de
    demonstration viendront a part, avec un drapeau is_demo et un badge visible.
+
+   PLUS LU A L EXECUTION depuis la migration 0003. Le site sert les salons
+   depuis Supabase, via lib/salons-data.ts. Ce fichier reste la source
+   versionnee : il alimente supabase/migrations/0003_donnees_salons.sql,
+   que produit `node supabase/outils/generer-0003.js`. Corriger une ligne
+   ici ne change RIEN au site tant que la migration na pas ete regeneree
+   puis rejouee dans lediteur SQL.
 */
 
 import type { Salon } from "@/lib/salons";
