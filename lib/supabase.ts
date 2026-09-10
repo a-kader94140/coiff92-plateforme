@@ -13,7 +13,7 @@ import { createClient } from "@supabase/supabase-js";
    configuration, le recréer ne coûte rien, et un client gardé au niveau
    du module vieillit mal dans un environnement sans état. */
 
-function configuration() {
+export function configuration() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const cle = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 

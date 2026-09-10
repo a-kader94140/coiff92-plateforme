@@ -13,6 +13,10 @@
 export type SalonType = "barber" | "coiffeur" | "mixte";
 
 export type Prestation = {
+  /** L'identifiant en base. Absent sur la fiche publique, qui n'en a
+   *  pas l'usage ; présent dans l'espace gérant, où il désigne la
+   *  ligne à modifier ou à supprimer. */
+  id?: string;
   label: string;
   dureeMin: number;
   prixCents: number;
