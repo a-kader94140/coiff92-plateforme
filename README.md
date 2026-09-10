@@ -3,8 +3,11 @@
 Annuaire des coiffeurs et barbers des Hauts-de-Seine, qui permet d'envoyer une
 demande de rendez-vous à un salon. MVP en cours.
 
-> Le site statique d'origine, `../annuaire-coiffeurs-92/`, **reste en ligne et
+> Le site statique d'origine, « Annuaire coiffeurs 92 », **reste en ligne et
 > intact**. Ce projet est sa suite, pas son remplaçant tant qu'il n'est pas fini.
+
+> Ce dépôt a été extrait le 10/09/2026 du plan de travail personnel où le projet
+> est né, avec son historique complet. Il ne contient plus que la plateforme.
 
 ## Démarrer
 
