@@ -25,6 +25,14 @@ export function Hero({
 }) {
   return (
     <div className="band-editorial">
+      {/* Un <link> rendu ici est remonté dans le <head> par Next : le
+          navigateur lance le téléchargement de la photo du héro avant
+          même d'avoir fini de parser le reste de la page. Sans ça, une
+          image chargée par le réseau (contrairement au site statique,
+          servi en local) peut encore être en train de se décoder au
+          moment où l'utilisateur commence à défiler, ce qui fait sauter
+          des frames de l'animation liée au scroll. */}
+      <link rel="preload" as="image" href="/annuaire/barbe.jpg" fetchPriority="high" />
       <section className="hero">
         <div className="hero-media">
           {/* alt vide : l'image est décorative, l'information qu'elle

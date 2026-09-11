@@ -201,7 +201,19 @@ h3 {
   }
 }
 
+/* Portée depuis le site statique : sans ça, les liens d'ancre (le CTA
+   du héro, la nav "Annuaire/Villes/À propos") sautent d'un coup au lieu
+   de défiler, ce qui casse la continuité avec l'animation liée au
+   scroll qui tourne juste après. */
+html {
+  scroll-behavior: smooth;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
