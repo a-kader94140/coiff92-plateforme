@@ -53,6 +53,7 @@ export function Filtres({ q, ville, type, tri, communes, total, nbCommunes }: Pr
 
   return (
     <div
+      id="filtres"
       className="sticky top-0 z-20 flex flex-wrap items-center gap-2.5 border-b
                  border-[var(--hairline)] bg-bg/95 px-5 py-4 backdrop-blur-md md:px-6"
     >

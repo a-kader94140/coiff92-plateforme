@@ -62,6 +62,14 @@
   --display-tracking: -0.008em;
   --display-word-gap: 0.07em;
 
+  /* ---- Héro de l'accueil ----
+     Constante, non redéfinie dans le thème sombre ni sous
+     prefers-color-scheme : le héro reste une image traitée, texte
+     clair sur voile sombre dans les deux thèmes. Une photo de barbier
+     est sombre, un voile clair la délaverait. Porté du site statique
+     annuaire-coiffeurs-92/. */
+  --hero-ink: #ffffff;
+
   color-scheme: light;
 }
 

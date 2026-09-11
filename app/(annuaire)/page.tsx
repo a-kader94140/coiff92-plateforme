@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Filtres } from "@/components/annuaire/filtres";
+import { Hero } from "@/components/annuaire/hero";
 import { SalonRow } from "@/components/annuaire/salon-row";
 import { buttonClass } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/states";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { estTri, estType } from "@/lib/salons";
 import { chercherSalons, compterSalons, listeCommunes } from "@/lib/salons-data";
 
@@ -39,15 +39,7 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
 
   return (
     <div className="flex min-h-[100svh] flex-col">
-      <header
-        className="flex h-18 shrink-0 items-center justify-between border-b
-                   border-[var(--hairline)] px-5 md:px-6"
-      >
-        <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
-        </Link>
-        <ThemeToggle />
-      </header>
+      <Hero adressesReleves={comptes.reels} nbCommunes={communes.length} />
 
       <Filtres
         q={q}
@@ -60,9 +52,11 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
       />
 
       <main className="flex-1">
-        <h1 className="sr-only">
-          Annuaire des coiffeurs et barbers des Hauts-de-Seine
-        </h1>
+        {/* Cible du lien « Annuaire » du héro. scroll-mt compense la
+            hauteur de la barre de filtres, restée collée en haut :
+            sans lui, la première ligne de résultats arriverait cachée
+            dessous. */}
+        <div id="annuaire" className="scroll-mt-18" />
 
         {total === 0 ? (
           <div className="px-5 py-20 md:px-6">

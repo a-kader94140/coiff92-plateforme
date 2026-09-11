@@ -11,7 +11,18 @@ type Theme = "clair" | "sombre";
    avant le premier rendu. Ce composant se contente de le suivre puis de
    le changer. Tant que le visiteur n'a rien choisi, la page suit la
    préférence du système. */
-export function ThemeToggle({ className }: { className?: string }) {
+type Props = {
+  className?: string;
+  /* "hero" : posé en surimpression sur la photo du héro de l'accueil.
+     --divider et --muted-2 y seraient illisibles, la photo est
+     sombre quel que soit le thème actif. Seul l'habillage inactif
+     change, pour du blanc translucide ; le bloc actif reste en
+     accent, déjà lisible sur n'importe quel fond. */
+  variant?: "defaut" | "hero";
+};
+
+export function ThemeToggle({ className, variant = "defaut" }: Props) {
+  const surHero = variant === "hero";
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
@@ -47,7 +58,9 @@ export function ThemeToggle({ className }: { className?: string }) {
           "transition-colors duration-150",
           actif
             ? "bg-accent text-on-accent"
-            : "bg-transparent text-muted-2 hover:text-text",
+            : surHero
+              ? "bg-transparent text-white/70 hover:text-white"
+              : "bg-transparent text-muted-2 hover:text-text",
         )}
       >
         {libelle}
@@ -58,7 +71,8 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex overflow-hidden rounded-md border border-[var(--divider)]",
+        "inline-flex overflow-hidden rounded-md border",
+        surHero ? "border-white/30" : "border-[var(--divider)]",
         className,
       )}
     >
