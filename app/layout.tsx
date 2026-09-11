@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RetourHaut } from "@/components/ui/retour-haut";
 import { clashDisplay, satoshi, jetbrainsMono } from "./fonts";
 import "./globals.css";
 
@@ -53,7 +54,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <RetourHaut />
+      </body>
     </html>
   );
 }
