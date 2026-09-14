@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
+import { MenuSelect } from "@/components/ui/menu-select";
 import { LIBELLES_TYPE, type SalonType, type Tri } from "@/lib/salons";
 
 type Props = {
@@ -69,55 +70,40 @@ export function Filtres({ q, ville, type, tri, communes, total, nbCommunes }: Pr
         className={`${champ} min-w-50 flex-[1_1_240px]`}
       />
 
-      <label className="sr-only" htmlFor="ville">
-        Filtrer par commune
-      </label>
       {/* Assez large pour « Toutes les communes », son libellé le plus long :
-          en dessous, le sélecteur tronquait sa propre valeur par défaut. */}
-      <select
-        id="ville"
+          en dessous, le bouton tronquait sa propre valeur par défaut. */}
+      <MenuSelect
+        label="Filtrer par commune"
         value={ville}
-        onChange={(e) => naviguer({ ville: e.target.value })}
-        className={`${champ} min-w-52 flex-[0_1_210px] cursor-pointer`}
-      >
-        <option value="">Toutes les communes</option>
-        {communes.map((c) => (
-          <option key={c} value={c}>
-            {c}
-          </option>
-        ))}
-      </select>
+        placeholder="Toutes les communes"
+        options={communes.map((c) => ({ value: c, label: c }))}
+        onChange={(v) => naviguer({ ville: v })}
+        className="min-w-52 flex-[0_1_210px]"
+      />
 
-      <label className="sr-only" htmlFor="type">
-        Filtrer par type d&apos;établissement
-      </label>
-      <select
-        id="type"
+      <MenuSelect
+        label="Filtrer par type d'établissement"
         value={type}
-        onChange={(e) => naviguer({ type: e.target.value })}
-        className={`${champ} min-w-32 flex-[0_1_150px] cursor-pointer`}
-      >
-        <option value="">Tous les types</option>
-        {(Object.keys(LIBELLES_TYPE) as SalonType[]).map((t) => (
-          <option key={t} value={t}>
-            {LIBELLES_TYPE[t]}
-          </option>
-        ))}
-      </select>
+        placeholder="Tous les types"
+        options={(Object.keys(LIBELLES_TYPE) as SalonType[]).map((t) => ({
+          value: t,
+          label: LIBELLES_TYPE[t],
+        }))}
+        onChange={(v) => naviguer({ type: v })}
+        className="min-w-32 flex-[0_1_150px]"
+      />
 
-      <label className="sr-only" htmlFor="tri">
-        Classer par
-      </label>
-      <select
-        id="tri"
+      <MenuSelect
+        label="Classer par"
         value={tri}
-        onChange={(e) => naviguer({ tri: e.target.value })}
-        className={`${champ} min-w-32 flex-[0_1_150px] cursor-pointer`}
-      >
-        <option value="ville">Classer par ville</option>
-        <option value="nom">Classer par nom</option>
-        <option value="complete">Fiches complètes d&apos;abord</option>
-      </select>
+        options={[
+          { value: "ville", label: "Classer par ville" },
+          { value: "nom", label: "Classer par nom" },
+          { value: "complete", label: "Fiches complètes d'abord" },
+        ]}
+        onChange={(v) => naviguer({ tri: v })}
+        className="min-w-32 flex-[0_1_150px]"
+      />
 
       <p
         aria-live="polite"
