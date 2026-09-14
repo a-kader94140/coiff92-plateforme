@@ -134,10 +134,11 @@ export const trouverSalon = cache(
 
     const salon = versSalon(ligne as LigneAnnuaire);
 
-    /* Une fiche sans prestation n'a ni tarifs ni horaires à montrer :
-       c'est un des 136 relevés, on s'épargne deux requêtes. */
-    if (!salon.complete) return salon;
-
+    /* Les horaires sont demandés même pour une fiche non réclamée :
+       certaines en portent, relevées ailleurs en attendant que le
+       gérant reprenne la main. Seules les prestations restent liées à
+       « complete », c'est elles qui déclenchent le bouton de
+       rendez-vous. */
     const [{ data: prestations, error: ep }, { data: horaires, error: eh }] =
       await Promise.all([
         sb

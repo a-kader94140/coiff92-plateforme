@@ -51,10 +51,48 @@ const etiquette =
 
 /* ─────────────────────────  version A  ───────────────────────── */
 
-function FicheComplete({ salon }: { salon: Salon }) {
+/* Partagé par les deux versions de la fiche : une liste d'horaires se
+   présente pareil, qu'elle accompagne des prestations ou non. */
+function BlocHoraires({ horaires }: { horaires: Salon["horaires"] }) {
+  const liste = horaires ?? [];
+  if (liste.length === 0) return null;
   const aujourdhui = jourAParis();
-  const horaires = salon.horaires ?? [];
 
+  return (
+    <>
+      <h2 className={etiquette}>Horaires</h2>
+      <ul className="m-0 list-none p-0">
+        {ORDRE_SEMAINE.map((jour) => {
+          const h = liste.find((x) => x.jour === jour);
+          const cejour = jour === aujourdhui;
+          return (
+            <li
+              key={jour}
+              className={`flex justify-between rounded-sm px-2.5 py-2.5 ${
+                cejour ? "bg-surface-2" : ""
+              }`}
+            >
+              <span
+                className={`text-sm ${cejour ? "font-semibold text-accent-ink" : "text-text"}`}
+              >
+                {JOURS[jour]}
+                {/* Visible, et pas seulement pour les lecteurs d'écran : le
+                    gras et l'aplat disent « ce jour est particulier »,
+                    ils ne disent pas lequel. */}
+                {cejour && <span className="font-normal text-muted-2">, aujourd&apos;hui</span>}
+              </span>
+              <span className={`tabular text-[13px] ${cejour ? "text-text" : "text-muted-2"}`}>
+                {h?.ouvre && h.ferme ? `${formatHeure(h.ouvre)} à ${formatHeure(h.ferme)}` : "Fermé"}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+function FicheComplete({ salon }: { salon: Salon }) {
   return (
     <>
       <div className="flex flex-wrap gap-x-12 gap-y-8">
@@ -107,50 +145,7 @@ function FicheComplete({ salon }: { salon: Salon }) {
             </>
           )}
 
-          {horaires.length > 0 && (
-            <>
-              <h2 className={etiquette}>Horaires</h2>
-              <ul className="m-0 list-none p-0">
-                {ORDRE_SEMAINE.map((jour) => {
-                  const h = horaires.find((x) => x.jour === jour);
-                  const cejour = jour === aujourdhui;
-                  return (
-                    <li
-                      key={jour}
-                      className={`flex justify-between rounded-sm px-2.5 py-2.5 ${
-                        cejour ? "bg-surface-2" : ""
-                      }`}
-                    >
-                      <span
-                        className={`text-sm ${
-                          cejour ? "font-semibold text-accent-ink" : "text-text"
-                        }`}
-                      >
-                        {JOURS[jour]}
-                        {/* Visible, et pas seulement pour les lecteurs d'écran : le
-                            gras et l'aplat disent « ce jour est particulier »,
-                            ils ne disent pas lequel. */}
-                        {cejour && (
-                          <span className="font-normal text-muted-2">
-                            , aujourd&apos;hui
-                          </span>
-                        )}
-                      </span>
-                      <span
-                        className={`tabular text-[13px] ${
-                          cejour ? "text-text" : "text-muted-2"
-                        }`}
-                      >
-                        {h?.ouvre && h.ferme
-                          ? `${formatHeure(h.ouvre)} à ${formatHeure(h.ferme)}`
-                          : "Fermé"}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </>
-          )}
+          <BlocHoraires horaires={salon.horaires} />
 
           <a
             href={lienCarte(salon)}
@@ -174,8 +169,28 @@ function FicheComplete({ salon }: { salon: Salon }) {
    On donne au visiteur la seule action utile dont on dispose,
    l'itinéraire, et au gérant une porte d'entrée. */
 function FicheNonReclamee({ salon }: { salon: Salon }) {
+  const horaires = salon.horaires ?? [];
+
   return (
     <div className="flex flex-col items-start">
+      {(salon.description || horaires.length > 0) && (
+        <div className="mb-8 w-full">
+          {salon.description && (
+            <p className="m-0 text-[15px] leading-relaxed text-text">{salon.description}</p>
+          )}
+          <div className="max-w-60">
+            <BlocHoraires horaires={salon.horaires} />
+          </div>
+          {/* La fiche n'a pas encore de gérant : ces informations viennent
+              d'un relevé externe, pas d'une validation par le salon. Le
+              dire évite de faire passer une donnée peut-être obsolète pour
+              une donnée officielle. */}
+          <p className="m-0 mt-3 text-xs text-muted-3">
+            Horaires relevés en ligne, non confirmés par le salon.
+          </p>
+        </div>
+      )}
+
       <a href={lienCarte(salon)} target="_blank" rel="noopener" className={btnPrincipal}>
         Voir l&apos;itinéraire
       </a>
@@ -185,8 +200,8 @@ function FicheNonReclamee({ salon }: { salon: Salon }) {
           Vous gérez ce salon ?
         </p>
         <p className="m-0 mb-4 max-w-[55ch] text-sm leading-relaxed text-muted-2">
-          Réclamez cette fiche pour ajouter vos prestations, vos horaires, et recevoir
-          des demandes de rendez-vous en ligne.
+          Réclamez cette fiche pour ajouter vos prestations, confirmer vos horaires, et
+          recevoir des demandes de rendez-vous en ligne.
         </p>
         <Link
           href={`/reclamer/${salon.slug}`}
