@@ -1,0 +1,27 @@
+/* Anneau d'avancement du bouton "retour en haut" : combien du document
+   a été parcouru, purement en CSS, piloté par une frise de scroll
+   native (animation-timeline: scroll()). Aucun écouteur de scroll,
+   même principe que l'animation du héro (voir hero.css).
+
+   138.2 est la circonférence d'un cercle de rayon 22 (2 × π × 22), le
+   cercle dessiné dans retour-haut.tsx. Recalculer si le rayon change. */
+
+.retour-haut-anneau {
+  stroke-dasharray: 138.2;
+  stroke-dashoffset: 138.2;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .retour-haut-anneau {
+      animation: retour-haut-remplir linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes retour-haut-remplir {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
