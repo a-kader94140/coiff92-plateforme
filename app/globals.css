@@ -45,9 +45,16 @@
   --accent-active: #8a2714;
   --accent-wash: color-mix(in srgb, var(--accent) 8%, transparent);
 
-  /* ---- Filets ---- */
+  /* ---- Filets ----
+     --divider sert de bordure aux champs, boutons et badges (voir
+     field.tsx, button.tsx) : c'est un composant d'interface, pas du
+     texte, le seuil WCAG 1.4.11 est 3:1 et non 4,5:1. Les 26% d'origine
+     ne tenaient que 1,75:1 en clair et 2,16:1 en sombre. Redéfini plus
+     bas par thème, pas laissé en simple color-mix constant : sombre a
+     besoin de moins d'opacité que clair pour atteindre 3:1, --text et
+     --bg n'ayant pas le même écart de luminance dans les deux thèmes. */
   --hairline: color-mix(in srgb, var(--text) 14%, transparent);
-  --divider: color-mix(in srgb, var(--text) 26%, transparent);
+  --divider: color-mix(in srgb, var(--text) 49%, transparent);
 
   /* ---- Formes ----
      Un seul système. 3px pour les éléments de saisie et les badges,
@@ -93,6 +100,8 @@
   --accent-hover: #ee7f68;
   --accent-active: #f2957f;
 
+  --divider: color-mix(in srgb, var(--text) 37%, transparent);
+
   color-scheme: dark;
 }
 
@@ -114,6 +123,8 @@
     --on-accent: #101113;
     --accent-hover: #ee7f68;
     --accent-active: #f2957f;
+
+    --divider: color-mix(in srgb, var(--text) 37%, transparent);
 
     color-scheme: dark;
   }
