@@ -39,6 +39,19 @@ export function SalonRow({ salon, tri }: { salon: Salon; tri: Tri }) {
                 Démo
               </span>
             )}
+            {/* Discret et positif plutôt qu'un signal d'alerte : la
+                grande majorité des fiches sont dans ce cas, ça ne doit
+                pas lire comme « cassé ». La cible n'est même pas le
+                visiteur, c'est le gérant qui tombe sur sa propre fiche
+                en parcourant la liste. */}
+            {!salon.demo && !salon.reclamee && (
+              <span
+                className="rounded-sm border border-dashed border-[var(--muted-3)] px-1.5
+                           py-0.5 font-mono text-[10px] uppercase tracking-[0.05em] text-muted-2"
+              >
+                Fiche libre
+              </span>
+            )}
           </span>
 
           {/* Classé par ville, la commune est déjà l'en-tête juste au-dessus :
