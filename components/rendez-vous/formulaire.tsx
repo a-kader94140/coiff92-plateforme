@@ -370,6 +370,13 @@ export function FormulaireDemande({ salon }: { salon: Salon }) {
             ? "Ne fermez pas cette page, l'envoi est en cours."
             : "Le salon vous recontacte pour confirmer. Sans sa réponse, rien n'est réservé."}
         </p>
+        <p className="m-0 text-center text-[12px] leading-relaxed text-muted-3">
+          Ces informations sont transmises au salon et supprimées 12 mois
+          après l&apos;envoi.{" "}
+          <Link href="/confidentialite" className="underline underline-offset-2">
+            En savoir plus
+          </Link>
+        </p>
       </div>
     </form>
   );

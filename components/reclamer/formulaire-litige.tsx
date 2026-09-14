@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { LITIGE_VIERGE, SITUATION_MIN } from "@/lib/connexion";
@@ -106,6 +107,12 @@ export function FormulaireLitige({
       <Button type="submit" disabled={enCours} className="self-start">
         {enCours ? "Envoi en cours…" : "Envoyer ma demande"}
       </Button>
+      <p className="m-0 text-[12px] leading-relaxed text-muted-3">
+        Ce signalement est supprimé 12 mois après l&apos;envoi.{" "}
+        <Link href="/confidentialite" className="underline underline-offset-2">
+          En savoir plus
+        </Link>
+      </p>
     </form>
   );
 }

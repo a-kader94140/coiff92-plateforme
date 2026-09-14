@@ -108,6 +108,11 @@ export default async function Annuaire({ searchParams }: { searchParams: Params 
             </>
           )}
         </p>
+        <p className="m-0 mt-3 text-[13px] leading-relaxed text-muted-2">
+          <Link href="/confidentialite" className="underline underline-offset-2">
+            Confidentialité et mentions légales
+          </Link>
+        </p>
       </footer>
     </div>
   );

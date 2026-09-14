@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/rgpd/purge", "schedule": "0 3 * * *" }
+  ]
+}
