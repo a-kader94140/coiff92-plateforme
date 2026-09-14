@@ -13,13 +13,21 @@ import "./retour-haut.css";
    sentinelle sort de cette zone reduite, on sait qu'on a depasse ce
    seuil, sans recalculer quoi que ce soit a chaque frame.
 
-   L'anneau qui l'entoure suit la meme philosophie : aucun ecouteur de
-   scroll non plus, juste une frise de defilement native
-   (animation-timeline: scroll(), voir retour-haut.css) qui remplit le
-   cercle en accent a mesure qu'on avance dans le document. */
+   L'anneau qui l'entoure suit la meme philosophie en priorité : une
+   frise de defilement native (animation-timeline: scroll(), voir
+   retour-haut.css) qui remplit le cercle en accent a mesure qu'on
+   avance dans le document, sans ecouteur de scroll.
+
+   Repli pour Safari iOS, qui ne supporte pas encore cette frise : un
+   vrai ecouteur de scroll, mais seulement quand CSS.supports() dit
+   que le navigateur ne sait pas faire autrement. Sur Chrome et Edge,
+   ce repli ne s'active jamais. */
+const CIRCONFERENCE = 138.2;
+
 export function RetourHaut() {
   const sentinelle = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [avancement, setAvancement] = useState<number | null>(null);
 
   useEffect(() => {
     const cible = sentinelle.current;
@@ -30,6 +38,31 @@ export function RetourHaut() {
     );
     observateur.observe(cible);
     return () => observateur.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (typeof CSS !== "undefined" && CSS.supports("animation-timeline: scroll()")) {
+      return;
+    }
+
+    let repere = 0;
+    function mesurer() {
+      repere = 0;
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      const max = scrollHeight - clientHeight;
+      setAvancement(max > 0 ? Math.min(1, Math.max(0, scrollTop / max)) : 0);
+    }
+    function surScroll() {
+      if (repere) return;
+      repere = requestAnimationFrame(mesurer);
+    }
+
+    mesurer();
+    window.addEventListener("scroll", surScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", surScroll);
+      if (repere) cancelAnimationFrame(repere);
+    };
   }, []);
 
   function remonter() {
@@ -68,6 +101,16 @@ export function RetourHaut() {
             stroke="var(--accent)"
             strokeWidth="1.5"
             strokeLinecap="round"
+            /* Un style inline l'emporte toujours sur la règle CSS externe :
+               tant que le repli est actif (avancement non nul), il pilote
+               le remplissage à la place de l'animation CSS. Sur un
+               navigateur qui sait faire animation-timeline: scroll(),
+               avancement reste null et cette ligne ne s'applique jamais. */
+            style={
+              avancement !== null
+                ? { strokeDashoffset: CIRCONFERENCE * (1 - avancement) }
+                : undefined
+            }
           />
         </svg>
 
