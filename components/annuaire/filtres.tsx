@@ -23,6 +23,7 @@ export function Filtres({ q, ville, type, tri, communes, total, nbCommunes }: Pr
   const [enCours, demarrer] = useTransition();
   const [saisie, setSaisie] = useState(q);
   const premierRendu = useRef(true);
+  const scrollAvant = useRef<number | null>(null);
 
   function naviguer(champs: Record<string, string>) {
     const params = new URLSearchParams();
@@ -32,8 +33,26 @@ export function Filtres({ q, ville, type, tri, communes, total, nbCommunes }: Pr
     if (valeurs.type) params.set("type", valeurs.type);
     if (valeurs.tri && valeurs.tri !== "ville") params.set("tri", valeurs.tri);
     const qs = params.toString();
+    /* { scroll: false } ne suffit pas : router.replace() fait quand
+       même remonter la page en haut, y compris pour une simple frappe
+       dans la recherche. On note la position avant de lancer la
+       transition, et on la réimpose nous-mêmes une fois le nouveau
+       rendu arrivé (voir l'effet sur enCours plus bas), plutôt que de
+       compter sur une option qui ne tient pas sa promesse ici. */
+    scrollAvant.current = window.scrollY;
     demarrer(() => router.replace(qs ? `/?${qs}` : "/", { scroll: false }));
   }
+
+  useEffect(() => {
+    if (!enCours && scrollAvant.current !== null) {
+      /* behavior: "auto" est nécessaire, pas juste l'omettre : sinon
+         scroll-behavior: smooth (globals.css) anime ce retour, ce qui
+         se verrait comme un aller-retour au lieu de ne rien voir du
+         tout. */
+      window.scrollTo({ top: scrollAvant.current, behavior: "auto" });
+      scrollAvant.current = null;
+    }
+  }, [enCours]);
 
   /* La saisie ne déclenche pas une navigation par frappe : on attend une
      pause de 250 ms, sinon chaque lettre relance un rendu serveur. */
