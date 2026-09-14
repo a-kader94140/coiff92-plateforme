@@ -149,7 +149,7 @@ export const SALONS: Salon[] = [
   { slug: "dk-hair-gennevilliers", name: "DK Hair", city: "Gennevilliers", postalCode: "92230", street: "142 avenue Gabriel Péri", type: "coiffeur" },
   { slug: "dop-coiffure-clichy", name: "Dop Coiffure", city: "Clichy", postalCode: "92110", street: "53 boulevard Victor Hugo", type: "coiffeur" },
   { slug: "shea-hair-colombes", name: "Shea Hair", city: "Colombes", postalCode: "92700", street: "68 rue Pierre Brossolette", type: "coiffeur" },
-  { slug: "coiffure-de-l-amitie-montrouge", name: "Coiffure de l'Amitié", city: "Montrouge", postalCode: "92120", street: "113 avenue Aristide Briand", type: "coiffeur" },
+  { slug: "coiffure-de-l-amitie-montrouge", name: "Coiffure des Amis", city: "Montrouge", postalCode: "92120", street: "113 avenue Aristide Briand", type: "coiffeur" },
   { slug: "la-moustache-du-gentleman-levallois-perret", name: "La Moustache du Gentleman", city: "Levallois-Perret", postalCode: "92300", street: "43 rue d'Alsace", type: "barber" },
   { slug: "les-barboristes-levallois-levallois-perret", name: "Les Barboristes Levallois", city: "Levallois-Perret", postalCode: "92300", street: "26 rue Voltaire", type: "barber" },
   { slug: "les-belles-barbes-issy-les-moulineaux", name: "Les Belles Barbes", city: "Issy-les-Moulineaux", postalCode: "92130", street: "40 rue Jean-Pierre Timbaud", type: "barber" },

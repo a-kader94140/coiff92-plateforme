@@ -166,7 +166,7 @@ insert into public.salons (slug, nom, ville, code_postal, rue, type, demo) value
   ('dk-hair-gennevilliers', 'DK Hair', 'Gennevilliers', '92230', '142 avenue Gabriel Péri', 'coiffeur', false),
   ('dop-coiffure-clichy', 'Dop Coiffure', 'Clichy', '92110', '53 boulevard Victor Hugo', 'coiffeur', false),
   ('shea-hair-colombes', 'Shea Hair', 'Colombes', '92700', '68 rue Pierre Brossolette', 'coiffeur', false),
-  ('coiffure-de-l-amitie-montrouge', 'Coiffure de l''Amitié', 'Montrouge', '92120', '113 avenue Aristide Briand', 'coiffeur', false),
+  ('coiffure-de-l-amitie-montrouge', 'Coiffure des Amis', 'Montrouge', '92120', '113 avenue Aristide Briand', 'coiffeur', false),
   ('la-moustache-du-gentleman-levallois-perret', 'La Moustache du Gentleman', 'Levallois-Perret', '92300', '43 rue d''Alsace', 'barber', false),
   ('les-barboristes-levallois-levallois-perret', 'Les Barboristes Levallois', 'Levallois-Perret', '92300', '26 rue Voltaire', 'barber', false),
   ('les-belles-barbes-issy-les-moulineaux', 'Les Belles Barbes', 'Issy-les-Moulineaux', '92130', '40 rue Jean-Pierre Timbaud', 'barber', false),
