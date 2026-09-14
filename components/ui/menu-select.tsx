@@ -59,7 +59,12 @@ export function MenuSelect({ label, value, placeholder, options, onChange, class
 
   useEffect(() => {
     if (!ouvert) return;
-    panneau.current?.focus();
+    /* preventScroll : le panneau est déjà à l'écran, juste sous le
+       bouton dans la barre collée en haut. Sans ça, .focus() fait
+       remonter la page au clic, certains navigateurs recalculant mal
+       la position d'un élément en position: sticky au moment précis
+       du focus. */
+    panneau.current?.focus({ preventScroll: true });
 
     function surClicExterieur(e: MouseEvent) {
       if (bouton.current?.contains(e.target as Node) || panneau.current?.contains(e.target as Node)) {
@@ -74,13 +79,13 @@ export function MenuSelect({ label, value, placeholder, options, onChange, class
   function choisir(index: number) {
     onChange(toutes[index].value);
     setOuvert(false);
-    bouton.current?.focus();
+    bouton.current?.focus({ preventScroll: true });
   }
 
   function surClavier(e: React.KeyboardEvent) {
     if (e.key === "Escape") {
       setOuvert(false);
-      bouton.current?.focus();
+      bouton.current?.focus({ preventScroll: true });
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       setActif((i) => Math.min(i + 1, toutes.length - 1));
