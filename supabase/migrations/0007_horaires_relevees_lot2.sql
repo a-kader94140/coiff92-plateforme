@@ -18,7 +18,8 @@
 -- Cas particulier bis : french-barber-rueil-rueil-malmaison n'a pas de
 -- fiche trouvée sous ce nom exact. Les horaires ci-dessous viennent
 -- d'une fiche "Barbershop Rueil" à la même adresse (65 avenue Paul
--- Doumer), qui semble être le même établissement sans certitude totale.
+-- Doumer, 92500 Rueil-Malmaison) — confirmé par Kader, ce sont les
+-- bonnes horaires pour ce salon.
 --
 -- Rejouable comme la 0006 : chaque insert ne vise que les salons réels
 -- et non réclamés (s.demo = false et s.gerant_id is null).
