@@ -38,6 +38,10 @@ export type Salon = {
   postalCode: string;
   street: string;
   type: SalonType;
+  /** Coordonnées géocodées depuis l'adresse (API Adresse de l'IGN),
+   *  utilisées pour le menu d'itinéraire (Google Maps, Waze, Citymapper). */
+  lat?: number;
+  lng?: number;
   /** Vrai dès que le salon a réclamé sa fiche et l'a complétée. */
   complete?: boolean;
   /** Fiche fictive de démonstration, signalée à l'écran par un badge. */

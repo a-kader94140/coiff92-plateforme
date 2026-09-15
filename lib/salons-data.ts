@@ -34,6 +34,8 @@ type LigneAnnuaire = {
   code_postal: string;
   rue: string;
   type: string;
+  latitude: number | null;
+  longitude: number | null;
   demo: boolean;
   description: string | null;
   telephone: string | null;
@@ -42,7 +44,7 @@ type LigneAnnuaire = {
 };
 
 const CHAMPS_ANNUAIRE =
-  "id,slug,nom,ville,code_postal,rue,type,demo,description,telephone,reclamee,complete";
+  "id,slug,nom,ville,code_postal,rue,type,latitude,longitude,demo,description,telephone,reclamee,complete";
 
 /* La base garantit déjà que « type » vaut barber, coiffeur ou mixte : la
    contrainte type_valide de la 0002 refuse tout le reste. Ce cast dit
@@ -56,6 +58,8 @@ function versSalon(l: LigneAnnuaire): Salon {
     postalCode: l.code_postal,
     street: l.rue,
     type: l.type as SalonType,
+    lat: l.latitude ?? undefined,
+    lng: l.longitude ?? undefined,
     demo: l.demo,
     complete: l.complete,
     reclamee: l.reclamee,

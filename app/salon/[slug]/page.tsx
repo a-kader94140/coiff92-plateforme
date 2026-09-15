@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { RetourListe } from "@/components/salon/retour-liste";
+import { ItineraireMenu } from "@/components/salon/itineraire-menu";
 import {
   formatDuree,
   formatHeure,
@@ -35,11 +36,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       : `${salon.name}, ${salon.street}, ${salon.postalCode} ${salon.city}. Fiche de l'annuaire Coiff'92.`,
     openGraph: { title: titre, type: "website" },
   };
-}
-
-function lienCarte(salon: Salon) {
-  const adresse = `${salon.name} ${salon.street} ${salon.postalCode} ${salon.city}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adresse)}`;
 }
 
 /* Le CTA de la fiche est volontairement plus grand que la taille md.
@@ -148,15 +144,7 @@ function FicheComplete({ salon }: { salon: Salon }) {
 
           <BlocHoraires horaires={salon.horaires} />
 
-          <a
-            href={lienCarte(salon)}
-            target="_blank"
-            rel="noopener"
-            className="mt-6 inline-flex text-sm font-medium text-accent-ink underline
-                       underline-offset-4"
-          >
-            Voir l&apos;itinéraire
-          </a>
+          <ItineraireMenu salon={salon} variant="lien" className="mt-6" />
         </div>
       </div>
     </>
@@ -192,9 +180,7 @@ function FicheNonReclamee({ salon }: { salon: Salon }) {
         </div>
       )}
 
-      <a href={lienCarte(salon)} target="_blank" rel="noopener" className={btnPrincipal}>
-        Voir l&apos;itinéraire
-      </a>
+      <ItineraireMenu salon={salon} variant="bouton" />
 
       <div className="mt-8 w-full rounded-md border border-[var(--divider)] bg-surface p-6">
         <p className="m-0 mb-2 text-[15px] font-medium text-text">
