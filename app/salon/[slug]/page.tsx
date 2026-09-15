@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { RetourListe } from "@/components/salon/retour-liste";
 import {
   formatDuree,
   formatHeure,
@@ -242,6 +243,10 @@ export default async function FicheSalon({ params }: { params: Params }) {
       </header>
 
       <main className="mx-auto w-full max-w-[1000px] flex-1 px-5 py-6 pb-12 md:px-8">
+        <div className="mb-3">
+          <RetourListe />
+        </div>
+
         <nav aria-label="Fil d'Ariane" className="mb-5 text-[13px] text-muted-2">
           <Link href="/" className="hover:text-text hover:underline underline-offset-2">
             Annuaire
