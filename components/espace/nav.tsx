@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/components/ui/cn";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { seDeconnecter } from "@/lib/connexion-actions";
+import { Wordmark } from "@/components/ui/wordmark";
 
 /* La navigation de l'espace : latérale sur grand écran, en bas sur
    mobile.
@@ -46,7 +47,7 @@ export function NavEspace({ nomSalon }: { nomSalon: string }) {
                    border-[var(--hairline)] px-4 py-6 md:flex"
       >
         <Link href="/" className="font-display px-3 text-[20px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
         </Link>
 
         <div className="px-3">

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { Button, buttonClass } from "@/components/ui/button";
+import { Wordmark } from "@/components/ui/wordmark";
 
 /* Frontière d'erreur.
 
@@ -29,7 +30,7 @@ export default function Erreur({
     <div className="flex min-h-[100svh] flex-col">
       <header className="flex h-18 shrink-0 items-center border-b border-[var(--hairline)] px-5 md:px-6">
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
         </Link>
       </header>
 

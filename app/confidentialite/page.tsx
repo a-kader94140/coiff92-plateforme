@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Wordmark } from "@/components/ui/wordmark";
 
 export const metadata: Metadata = {
   title: "Confidentialité et mentions légales",
@@ -19,7 +20,7 @@ export default function Confidentialite() {
                    border-[var(--hairline)] px-5 md:px-6"
       >
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
         </Link>
         <ThemeToggle />
       </header>

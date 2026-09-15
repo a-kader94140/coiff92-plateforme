@@ -1,6 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Coiff'92">
+  <!-- « 92 » en Clash Display 600, vectorisé depuis app/fonts/ClashDisplay-600.woff2
+       (glyphes 9 et 2, extraits via opentype.js). Un SVG ne peut pas
+       charger de police web : sans ça, favicon et icône d'app retombaient
+       sur la police système du navigateur, jamais Clash Display. Issu de
+       la planche Claude Design « Logo, explorations » du 15/09/2026,
+       direction A retenue par Kader. Régénérer avec les mêmes glyphes si
+       la police change un jour : le script n'est pas versionné ici, mais
+       la méthode (decompresser le woff2, lire les tracés avec
+       opentype.js, recentrer sur le viewBox) est documentée dans
+       l'historique de session. -->
   <rect width="64" height="64" rx="8" fill="#b8341a"/>
-  <text x="32" y="45" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="38" font-weight="700"
-        letter-spacing="-1.5" fill="#ffffff">92</text>
+  <g transform="translate(9.119 43.356) scale(0.033898)" fill="#ffffff">
+    <path d="M349 10Q211 10 129.500-51Q48-112 48-215L48-223L215-223L215-215Q215-171 245.500-152.500Q276-134 349-134Q440-134 477-172.500Q514-211 514-312L514-356L503-356Q480-312 424-284Q368-256 283-256Q158-256 92-307Q26-358 26-460Q26-562 104.500-621Q183-680 330-680Q512-680 593-598.500Q674-517 674-339Q674-167 587-78.500Q500 10 349 10M338-360Q429-360 465.500-381Q502-402 502-449Q502-494 465-515Q428-536 338-536Q251-536 217-515.500Q183-495 183-449Q183-401 216.500-380.500Q250-360 338-360"/>
+    <path d="M1322-135L1322 0L727 0L727-96Q727-185 770-236Q813-287 919-322L1091-378Q1137-394 1155-412.500Q1173-431 1173-463Q1173-504 1143-523.500Q1113-543 1035-543Q946-543 910.500-516.500Q875-490 875-432L875-419L728-419L728-432Q728-539 805.500-609.500Q883-680 1040-680Q1185-680 1254.500-621Q1324-562 1324-461Q1324-376 1273-326Q1222-276 1127-250L981-210Q929-194 907-175Q885-156 885-118L1060-135"/>
+  </g>
 </svg>

@@ -5,6 +5,7 @@ import { EnteteDemande } from "@/components/rendez-vous/entete";
 import { FormulaireDemande } from "@/components/rendez-vous/formulaire";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { trouverSalon } from "@/lib/salons-data";
+import { Wordmark } from "@/components/ui/wordmark";
 
 type Params = Promise<{ slug: string }>;
 
@@ -37,7 +38,7 @@ export default async function DemandeRendezVous({ params }: { params: Params }) 
                    border-[var(--hairline)] px-5 md:px-6"
       >
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
         </Link>
         <ThemeToggle />
       </header>

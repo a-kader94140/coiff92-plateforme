@@ -1,0 +1,22 @@
+/* L'apostrophe du logotype « Coiff'92 » : un trait plein incliné plutôt
+   que l'apostrophe courbe de la police, dessiné comme une vraie
+   articulation entre « Coiff » et « 92 » plutôt qu'une ponctuation
+   empruntée. Porté de la planche Claude Design « Logo, explorations »
+   du 15/09/2026, direction A retenue par Kader.
+
+   En unités em, pour rester proportionné à n'importe quelle taille de
+   rendu du mot-symbole (22px dans un en-tête, plus de 100px dans le
+   héro) sans reprendre les mesures à la main à chaque nouvel usage. Les
+   proportions viennent de la planche, mesurées à 52px : largeur 4px,
+   hauteur 16px, décalage -19px, soit environ 0,077em / 0,308em / -0,365em. */
+.wordmark-apostrophe {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.31em;
+  background: currentColor;
+  transform: skewX(-14deg);
+  margin: 0 0.055em;
+  position: relative;
+  top: -0.365em;
+  vertical-align: baseline;
+}

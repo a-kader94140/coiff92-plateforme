@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Wordmark } from "@/components/ui/wordmark";
 
 /* Un 404 doit rendre la main, pas constater l'échec. Il propose donc la
    seule action qui remet le visiteur sur les rails : revenir à l'annuaire.
@@ -17,7 +18,7 @@ export default function NotFound() {
                    border-[var(--hairline)] px-5 md:px-6"
       >
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
         </Link>
         <ThemeToggle />
       </header>

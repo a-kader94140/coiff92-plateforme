@@ -6,6 +6,7 @@ import { buttonClass } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { monSalon } from "@/lib/espace-data";
 import { gerantConnecte } from "@/lib/supabase-session";
+import { Wordmark } from "@/components/ui/wordmark";
 
 export const metadata: Metadata = {
   title: { default: "Espace gérant", template: "%s | Espace gérant" },
@@ -62,7 +63,7 @@ function SansFiche({ email }: { email: string }) {
                    border-[var(--hairline)] px-5 md:px-6"
       >
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
           <span className="tabular ml-2.5 text-[11px] uppercase tracking-[0.08em] text-muted-2">
             Espace gérant
           </span>

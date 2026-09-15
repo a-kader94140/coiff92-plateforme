@@ -34,7 +34,7 @@
   color: var(--hero-ink);
 }
 
-.hero-brand span {
+.hero-brand .wordmark-n92 {
   color: var(--accent);
 }
 
@@ -152,7 +152,7 @@
   color: var(--hero-ink);
 }
 
-.hero-title span {
+.hero-title .wordmark-n92 {
   color: var(--accent);
 }
 

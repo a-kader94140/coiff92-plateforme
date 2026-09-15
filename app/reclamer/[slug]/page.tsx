@@ -11,6 +11,7 @@ import { LIBELLES_TYPE } from "@/lib/salons";
 import { trouverSalon } from "@/lib/salons-data";
 import { monSalon } from "@/lib/espace-data";
 import { gerantConnecte } from "@/lib/supabase-session";
+import { Wordmark } from "@/components/ui/wordmark";
 
 type Params = Promise<{ slug: string }>;
 
@@ -48,7 +49,7 @@ export default async function ReclamerFiche({ params }: { params: Params }) {
                    border-[var(--hairline)] px-5 md:px-6"
       >
         <Link href="/" className="font-display text-[22px]">
-          Coiff&apos;<span className="text-accent-ink">92</span>
+          <Wordmark n92ClassName="text-accent-ink" />
           <span className="tabular ml-2.5 text-[11px] uppercase tracking-[0.08em] text-muted-2">
             Espace gérant
           </span>

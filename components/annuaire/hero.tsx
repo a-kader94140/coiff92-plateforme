@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import "./hero.css";
+import { Wordmark } from "@/components/ui/wordmark";
 
 /* Le héro et la bande éditoriale de l'accueil, portés depuis le site
    statique livrables/ia/annuaire-coiffeurs-92/ qui reste la référence
@@ -49,7 +50,7 @@ export function Hero({
 
         <div className="hero-topbar">
           <Link href="/" className="hero-brand">
-            Coiff&apos;<span>92</span>
+            <Wordmark />
           </Link>
           <nav className="hero-nav" aria-label="Navigation principale">
             <a className="hero-kicker" href="#annuaire">
@@ -71,7 +72,7 @@ export function Hero({
               suffixe caché porte la description que le wordmark seul
               ne donne pas. */}
           <h1 className="hero-title">
-            Coiff&apos;<span>92</span>
+            <Wordmark />
             <span className="sr-only">
               , annuaire des coiffeurs et barbers des Hauts-de-Seine
             </span>
