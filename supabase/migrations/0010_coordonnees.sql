@@ -22,15 +22,20 @@ alter table public.salons
 -- ─────────────────────────  la vue annuaire  ─────────────────────────
 --
 -- Même précaution que pour reclamee en 0004 : « create or replace »
--- garde la vue en place, on ajoute juste les deux colonnes.
+-- garde la vue en place, on ajoute juste les deux colonnes. Mais
+-- Postgres n'autorise ça qu'à la fin de la liste, pas au milieu :
+-- latitude/longitude vont donc après complete, et non à côté de type
+-- comme dans la table elle-même. Insérer une colonne plus tôt aurait
+-- décalé toutes celles qui suivent, et Postgres refuse ce genre de
+-- renommage implicite (erreur 42P16).
 
 create or replace view public.annuaire
 with (security_invoker = true)
 as
 select
   s.id, s.slug, s.nom, s.ville, s.code_postal, s.rue, s.type, s.demo,
-  s.latitude, s.longitude,
   s.description, s.telephone,
   s.reclamee,
-  exists (select 1 from public.prestations p where p.salon_id = s.id) as complete
+  exists (select 1 from public.prestations p where p.salon_id = s.id) as complete,
+  s.latitude, s.longitude
 from public.salons s;
