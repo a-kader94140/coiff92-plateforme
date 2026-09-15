@@ -18,6 +18,14 @@ alter table public.salons
   add column if not exists latitude  double precision,
   add column if not exists longitude double precision;
 
+-- La 0004 a fermé la lecture de public.salons colonne par colonne
+-- (« grant select (id, slug, ...) »), latitude/longitude n'y étaient
+-- pas. Sans ce grant, la vue annuaire (security_invoker = true, donc
+-- vérifiée avec les droits de l'appelant) échoue avec « permission
+-- denied for table salons » dès qu'elle les lit.
+
+grant select (latitude, longitude) on public.salons to anon, authenticated;
+
 
 -- ─────────────────────────  la vue annuaire  ─────────────────────────
 --
